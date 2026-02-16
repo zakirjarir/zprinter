@@ -1,0 +1,1 @@
+{"version":3,"file":"definitions.js","sourceRoot":"","sources":["../../src/definitions.ts"],"names":[],"mappings":"","sourcesContent":["export interface ZPrinterPlugin {\n  connect(options: { address: string }): Promise<{ connected: boolean }>;\n  printText(options: { text: string }): Promise<{ printed: boolean }>;\n  cut(): Promise<{ cut: boolean }>;\n}\n"]}

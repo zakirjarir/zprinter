@@ -1,5 +1,4 @@
 import { registerPlugin } from '@capacitor/core';
-
 import type { ZPrinterPlugin } from './definitions';
 
 const ZPrinter = registerPlugin<ZPrinterPlugin>('ZPrinter', {

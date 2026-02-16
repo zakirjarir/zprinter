@@ -1,0 +1,57 @@
+{
+  "api": {
+    "name": "ZPrinterPlugin",
+    "slug": "zprinterplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "connect",
+        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ address: string; }"
+          }
+        ],
+        "returns": "Promise<{ connected: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "connect"
+      },
+      {
+        "name": "printText",
+        "signature": "(options: { text: string; }) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ text: string; }"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "printtext"
+      },
+      {
+        "name": "cut",
+        "signature": "() => Promise<{ cut: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ cut: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "cut"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}

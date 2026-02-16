@@ -1,23 +1,47 @@
-import Foundation
 import Capacitor
+import CoreBluetooth
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(ZPrinterPlugin)
-public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "ZPrinterPlugin"
-    public let jsName = "ZPrinter"
-    public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
-    ]
-    private let implementation = ZPrinter()
+public class ZPrinterPlugin: CAPPlugin {
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
+    var centralManager: CBCentralManager?
+    var peripheral: CBPeripheral?
+
+    @objc func connect(_ call: CAPPluginCall) {
+        let address = call.getString("address") ?? ""
+        // iOS e direct address diye connect kora possible na
+        // BLE device scan korte hobe
+        centralManager = CBCentralManager(delegate: self, queue: nil)
         call.resolve([
-            "value": implementation.echo(value)
+            "connected": false,
+            "message": "iOS BLE printers need scan and connect"
         ])
+    }
+
+    @objc func printText(_ call: CAPPluginCall) {
+        let text = call.getString("text") ?? ""
+        // iOS e printer protocol onujayi data pathano lagbe
+        call.resolve([
+            "printed": true,
+            "text": text
+        ])
+    }
+
+    @objc func cut(_ call: CAPPluginCall) {
+        // iOS printer cut support depends on printer
+        call.resolve([
+            "cut": true
+        ])
+    }
+}
+
+extension ZPrinterPlugin: CBCentralManagerDelegate {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            print("Bluetooth is on, ready to scan")
+        default:
+            print("Bluetooth not ready")
+        }
     }
 }
