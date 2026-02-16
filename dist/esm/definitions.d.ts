@@ -21,4 +21,14 @@ export interface ZPrinterPlugin {
         cut: boolean;
     }>;
     disconnect(): Promise<void>;
+    connectUsb(): Promise<void>;
+    printUsb(options: {
+        text: string;
+    }): Promise<void>;
+    disconnectUsb(): Promise<void>;
+    connectThermal(): Promise<void>;
+    printThermal(options: {
+        text: string;
+    }): Promise<void>;
+    disconnectThermal(): Promise<void>;
 }

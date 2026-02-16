@@ -18,6 +18,12 @@ npx cap sync
 * [`printText(...)`](#printtext)
 * [`cut()`](#cut)
 * [`disconnect()`](#disconnect)
+* [`connectUsb()`](#connectusb)
+* [`printUsb(...)`](#printusb)
+* [`disconnectUsb()`](#disconnectusb)
+* [`connectThermal()`](#connectthermal)
+* [`printThermal(...)`](#printthermal)
+* [`disconnectThermal()`](#disconnectthermal)
 
 </docgen-index>
 
@@ -80,6 +86,68 @@ cut() => Promise<{ cut: boolean; }>
 
 ```typescript
 disconnect() => Promise<void>
+```
+
+--------------------
+
+
+### connectUsb()
+
+```typescript
+connectUsb() => Promise<void>
+```
+
+--------------------
+
+
+### printUsb(...)
+
+```typescript
+printUsb(options: { text: string; }) => Promise<void>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ text: string; }</code> |
+
+--------------------
+
+
+### disconnectUsb()
+
+```typescript
+disconnectUsb() => Promise<void>
+```
+
+--------------------
+
+
+### connectThermal()
+
+```typescript
+connectThermal() => Promise<void>
+```
+
+--------------------
+
+
+### printThermal(...)
+
+```typescript
+printThermal(options: { text: string; }) => Promise<void>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ text: string; }</code> |
+
+--------------------
+
+
+### disconnectThermal()
+
+```typescript
+disconnectThermal() => Promise<void>
 ```
 
 --------------------

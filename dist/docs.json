@@ -66,6 +66,78 @@
         "docs": "",
         "complexTypes": [],
         "slug": "disconnect"
+      },
+      {
+        "name": "connectUsb",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "connectusb"
+      },
+      {
+        "name": "printUsb",
+        "signature": "(options: { text: string; }) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ text: string; }"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "printusb"
+      },
+      {
+        "name": "disconnectUsb",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disconnectusb"
+      },
+      {
+        "name": "connectThermal",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "connectthermal"
+      },
+      {
+        "name": "printThermal",
+        "signature": "(options: { text: string; }) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ text: string; }"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "printthermal"
+      },
+      {
+        "name": "disconnectThermal",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disconnectthermal"
       }
     ],
     "properties": []

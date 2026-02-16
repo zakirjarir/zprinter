@@ -7,9 +7,12 @@ const ZPrinter = core.registerPlugin('ZPrinter', {
 });
 
 class ZPrinterWeb extends core.WebPlugin {
+    // =========================
+    // Bluetooth printer
+    // =========================
     async scanDevices() {
         console.warn('Web: scanDevices not supported');
-        return { devices: [] }; // empty array
+        return { devices: [] };
     }
     async connect() {
         console.warn('Web: connect not supported for classic Bluetooth printers');
@@ -32,6 +35,36 @@ class ZPrinterWeb extends core.WebPlugin {
     }
     async disconnect() {
         console.warn('Web: disconnect not supported');
+        return;
+    }
+    // =========================
+    // USB printer
+    // =========================
+    async connectUsb() {
+        console.warn('Web: connectUsb not supported');
+        return;
+    }
+    async printUsb(options) {
+        console.log('Web printUsb fallback:', options.text);
+        return;
+    }
+    async disconnectUsb() {
+        console.warn('Web: disconnectUsb not supported');
+        return;
+    }
+    // =========================
+    // Thermal printer
+    // =========================
+    async connectThermal() {
+        console.warn('Web: connectThermal not supported');
+        return;
+    }
+    async printThermal(options) {
+        console.log('Web printThermal fallback:', options.text);
+        return;
+    }
+    async disconnectThermal() {
+        console.warn('Web: disconnectThermal not supported');
         return;
     }
 }
