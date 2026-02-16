@@ -10,7 +10,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.Build;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import java.io.OutputStream;
 import java.util.Set;
@@ -23,12 +26,16 @@ public class ZPrinterPlugin extends Plugin {
     private OutputStream outputStream;
     private BluetoothDevice connectedDevice;
 
+    private BluetoothAdapter adapter;
+    private BroadcastReceiver receiver;
+    private JSArray devicesArray;
+
     // =========================
-    // Scan paired Bluetooth devices
+    // Scan paired + nearby Bluetooth devices
     // =========================
     @PluginMethod
     public void scanDevices(PluginCall call) {
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter == null) {
             call.reject("Bluetooth not supported on this device");
             return;
@@ -38,9 +45,10 @@ public class ZPrinterPlugin extends Plugin {
             return;
         }
 
-        Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
-        JSArray devicesArray = new JSArray();
+        devicesArray = new JSArray();
 
+        // Add paired devices
+        Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
         for (BluetoothDevice device : pairedDevices) {
             JSObject d = new JSObject();
             d.put("name", device.getName());
@@ -48,9 +56,45 @@ public class ZPrinterPlugin extends Plugin {
             devicesArray.put(d);
         }
 
-        JSObject ret = new JSObject();
-        ret.put("devices", devicesArray);
-        call.resolve(ret);
+        // Setup receiver for discovery of new devices
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    if (device != null) {
+                        JSObject d = new JSObject();
+                        d.put("name", device.getName());
+                        d.put("address", device.getAddress());
+                        devicesArray.put(d);
+                    }
+                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                    unregisterReceiver();
+                    JSObject ret = new JSObject();
+                    ret.put("devices", devicesArray);
+                    call.resolve(ret);
+                }
+            }
+        };
+
+        // Register receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        getContext().registerReceiver(receiver, filter);
+
+        // Start discovery
+        adapter.startDiscovery();
+    }
+
+    private void unregisterReceiver() {
+        try {
+            if (receiver != null) {
+                getContext().unregisterReceiver(receiver);
+                receiver = null;
+            }
+        } catch (Exception e) { }
     }
 
     // =========================
@@ -65,7 +109,6 @@ public class ZPrinterPlugin extends Plugin {
         }
 
         try {
-            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = adapter.getRemoteDevice(address);
 
             socket = device.createRfcommSocketToServiceRecord(
