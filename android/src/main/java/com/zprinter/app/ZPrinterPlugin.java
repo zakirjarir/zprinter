@@ -33,7 +33,7 @@ public class ZPrinterPlugin extends Plugin {
     // =========================
     @PluginMethod
     public void scanBluetoothDevices(PluginCall call) {
-        bluetoothScanner.scan(getContext(), new BluetoothScanner.ScanListener() {
+        bluetoothScanner.scan(getActivity(), new BluetoothScanner.ScanListener() {
             @Override
             public void onFinished(JSArray devices) {
                 JSObject result = new JSObject();
