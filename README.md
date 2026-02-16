@@ -5,7 +5,7 @@ this is a printer plugin
 ## Install
 
 ```bash
-npm install zprinter
+npm install zakirjarir/zprinter
 npx cap sync
 ```
 
