@@ -6,6 +6,10 @@ var capacitorZPrinter = (function (exports, core) {
     });
 
     class ZPrinterWeb extends core.WebPlugin {
+        async scanDevices() {
+            console.warn('Web: scanDevices not supported');
+            return { devices: [] }; // empty array
+        }
         async connect() {
             console.warn('Web: connect not supported for classic Bluetooth printers');
             return { connected: false };
@@ -24,6 +28,10 @@ var capacitorZPrinter = (function (exports, core) {
         async cut() {
             console.warn('Web: cut not supported');
             return { cut: false };
+        }
+        async disconnect() {
+            console.warn('Web: disconnect not supported');
+            return;
         }
     }
 

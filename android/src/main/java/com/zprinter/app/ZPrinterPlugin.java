@@ -7,6 +7,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -14,6 +15,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.OutputStream;
 import java.util.Set;
@@ -45,9 +48,18 @@ public class ZPrinterPlugin extends Plugin {
             return;
         }
 
+        // Runtime permissions for Android 12+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (getActivity().checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
+                    getActivity().checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                call.reject("BLUETOOTH_SCAN & BLUETOOTH_CONNECT permission required at runtime");
+                return;
+            }
+        }
+
         devicesArray = new JSArray();
 
-        // Add paired devices
+        // Add paired devices first
         Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
         for (BluetoothDevice device : pairedDevices) {
             JSObject d = new JSObject();
@@ -56,7 +68,7 @@ public class ZPrinterPlugin extends Plugin {
             devicesArray.put(d);
         }
 
-        // Setup receiver for discovery of new devices
+        // Setup BroadcastReceiver for discovery
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -85,6 +97,9 @@ public class ZPrinterPlugin extends Plugin {
         getContext().registerReceiver(receiver, filter);
 
         // Start discovery
+        if (adapter.isDiscovering()) {
+            adapter.cancelDiscovery();
+        }
         adapter.startDiscovery();
     }
 
@@ -94,7 +109,9 @@ public class ZPrinterPlugin extends Plugin {
                 getContext().unregisterReceiver(receiver);
                 receiver = null;
             }
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     // =========================

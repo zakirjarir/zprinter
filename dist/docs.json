@@ -6,8 +6,18 @@
     "tags": [],
     "methods": [
       {
+        "name": "scanDevices",
+        "signature": "() => Promise<{ devices: { name: string; address: string; }[]; }>",
+        "parameters": [],
+        "returns": "Promise<{ devices: { name: string; address: string; }[]; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "scandevices"
+      },
+      {
         "name": "connect",
-        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; }>",
+        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; deviceName?: string; deviceAddress?: string; }>",
         "parameters": [
           {
             "name": "options",
@@ -15,7 +25,7 @@
             "type": "{ address: string; }"
           }
         ],
-        "returns": "Promise<{ connected: boolean; }>",
+        "returns": "Promise<{ connected: boolean; deviceName?: string | undefined; deviceAddress?: string | undefined; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -46,6 +56,16 @@
         "docs": "",
         "complexTypes": [],
         "slug": "cut"
+      },
+      {
+        "name": "disconnect",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disconnect"
       }
     ],
     "properties": []

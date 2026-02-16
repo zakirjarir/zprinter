@@ -7,6 +7,10 @@ const ZPrinter = core.registerPlugin('ZPrinter', {
 });
 
 class ZPrinterWeb extends core.WebPlugin {
+    async scanDevices() {
+        console.warn('Web: scanDevices not supported');
+        return { devices: [] }; // empty array
+    }
     async connect() {
         console.warn('Web: connect not supported for classic Bluetooth printers');
         return { connected: false };
@@ -25,6 +29,10 @@ class ZPrinterWeb extends core.WebPlugin {
     async cut() {
         console.warn('Web: cut not supported');
         return { cut: false };
+    }
+    async disconnect() {
+        console.warn('Web: disconnect not supported');
+        return;
     }
 }
 
