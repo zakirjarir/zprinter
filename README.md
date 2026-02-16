@@ -13,24 +13,52 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`connect(...)`](#connect)
+* [`printText(...)`](#printtext)
+* [`cut()`](#cut)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### connect(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+connect(options: { address: string; }) => Promise<{ connected: boolean; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+| Param         | Type                              |
+| ------------- | --------------------------------- |
+| **`options`** | <code>{ address: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ connected: boolean; }&gt;</code>
+
+--------------------
+
+
+### printText(...)
+
+```typescript
+printText(options: { text: string; }) => Promise<{ printed: boolean; }>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ text: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
+
+--------------------
+
+
+### cut()
+
+```typescript
+cut() => Promise<{ cut: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ cut: boolean; }&gt;</code>
 
 --------------------
 
