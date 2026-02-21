@@ -11,6 +11,7 @@ import com.zprinter.app.bluetooth.BluetoothPrinter;
 import com.zprinter.app.usb.UsbPrinterManager;
 import com.zprinter.app.usb.ThermalPrinterManager;
 
+import android.content.pm.PackageManager;
 @CapacitorPlugin(name = "ZPrinter", requestCodes = {
         ZPrinterPlugin.REQUEST_BLUETOOTH_PERMISSIONS
 })
