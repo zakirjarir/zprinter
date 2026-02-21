@@ -1,6 +1,6 @@
 {
   "name": "zprinter",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "this is a printer plugin",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
