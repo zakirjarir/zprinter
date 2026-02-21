@@ -6,18 +6,18 @@
     "tags": [],
     "methods": [
       {
-        "name": "scanDevices",
-        "signature": "() => Promise<{ devices: { name: string; address: string; }[]; }>",
+        "name": "scanBluetoothDevices",
+        "signature": "() => Promise<{ devices: { name: string; address: string; }[]; count: number; }>",
         "parameters": [],
-        "returns": "Promise<{ devices: { name: string; address: string; }[]; }>",
+        "returns": "Promise<{ devices: { name: string; address: string; }[]; count: number; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "scandevices"
+        "slug": "scanbluetoothdevices"
       },
       {
-        "name": "connect",
-        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; deviceName?: string; deviceAddress?: string; }>",
+        "name": "connectBluetooth",
+        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; deviceName: string; deviceAddress: string; }>",
         "parameters": [
           {
             "name": "options",
@@ -25,60 +25,60 @@
             "type": "{ address: string; }"
           }
         ],
-        "returns": "Promise<{ connected: boolean; deviceName?: string | undefined; deviceAddress?: string | undefined; }>",
+        "returns": "Promise<{ connected: boolean; deviceName: string; deviceAddress: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "connect"
+        "slug": "connectbluetooth"
       },
       {
-        "name": "printText",
-        "signature": "(options: { text: string; }) => Promise<{ printed: boolean; }>",
+        "name": "printBluetoothText",
+        "signature": "(options: { text: string; fontSize?: number; align?: 'left' | 'center' | 'right'; isBold?: boolean; }) => Promise<{ printed: boolean; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ text: string; }"
+            "type": "{ text: string; fontSize?: number | undefined; align?: 'left' | 'center' | 'right' | undefined; isBold?: boolean | undefined; }"
           }
         ],
         "returns": "Promise<{ printed: boolean; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "printtext"
+        "slug": "printbluetoothtext"
       },
       {
-        "name": "cut",
+        "name": "cutBluetoothPaper",
         "signature": "() => Promise<{ cut: boolean; }>",
         "parameters": [],
         "returns": "Promise<{ cut: boolean; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "cut"
+        "slug": "cutbluetoothpaper"
       },
       {
-        "name": "disconnect",
+        "name": "disconnectBluetooth",
         "signature": "() => Promise<void>",
         "parameters": [],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "disconnect"
+        "slug": "disconnectbluetooth"
       },
       {
-        "name": "connectUsb",
+        "name": "connectUsbPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "connectusb"
+        "slug": "connectusbprinter"
       },
       {
-        "name": "printUsb",
+        "name": "printUsbText",
         "signature": "(options: { text: string; }) => Promise<void>",
         "parameters": [
           {
@@ -91,30 +91,30 @@
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "printusb"
+        "slug": "printusbtext"
       },
       {
-        "name": "disconnectUsb",
+        "name": "disconnectUsbPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "disconnectusb"
+        "slug": "disconnectusbprinter"
       },
       {
-        "name": "connectThermal",
+        "name": "connectThermalPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "connectthermal"
+        "slug": "connectthermalprinter"
       },
       {
-        "name": "printThermal",
+        "name": "printThermalText",
         "signature": "(options: { text: string; }) => Promise<void>",
         "parameters": [
           {
@@ -127,17 +127,17 @@
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "printthermal"
+        "slug": "printthermaltext"
       },
       {
-        "name": "disconnectThermal",
+        "name": "disconnectThermalPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "disconnectthermal"
+        "slug": "disconnectthermalprinter"
       }
     ],
     "properties": []

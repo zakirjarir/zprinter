@@ -3,73 +3,81 @@ import type { ZPrinterPlugin } from './definitions';
 
 export class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
   // =========================
-  // Bluetooth printer
+  // Bluetooth Printer
   // =========================
-  async scanDevices(): Promise<{ devices: { name: string; address: string }[] }> {
-    console.warn('Web: scanDevices not supported');
-    return { devices: [] };
+
+  async scanBluetoothDevices(): Promise<{
+    devices: { name: string; address: string }[];
+    count: number;
+  }> {
+    console.warn('Web: scanBluetoothDevices not supported');
+    return { devices: [], count: 0 };
   }
 
-  async connect(): Promise<{ connected: boolean }> {
-    console.warn('Web: connect not supported for classic Bluetooth printers');
-    return { connected: false };
+  async connectBluetooth(): Promise<{
+    connected: boolean;
+    deviceName: string;
+    deviceAddress: string;
+  }> {
+    console.warn('Web: connectBluetooth not supported');
+    return {
+      connected: false,
+      deviceName: '',
+      deviceAddress: '',
+    };
   }
 
-  async printText(options: { text: string }): Promise<{ printed: boolean }> {
-    console.log('Web printText fallback:', options.text);
-    // Browser fallback: open print dialog
+  async printBluetoothText(options: { text: string }): Promise<{ printed: boolean }> {
+    console.log('Web Bluetooth print fallback:', options.text);
+
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       printWindow.document.write('<pre>' + options.text + '</pre>');
       printWindow.print();
       printWindow.close();
     }
+
     return { printed: true };
   }
 
-  async cut(): Promise<{ cut: boolean }> {
-    console.warn('Web: cut not supported');
+  async cutBluetoothPaper(): Promise<{ cut: boolean }> {
+    console.warn('Web: cutBluetoothPaper not supported');
     return { cut: false };
   }
 
-  async disconnect(): Promise<void> {
-    console.warn('Web: disconnect not supported');
-    return;
+  async disconnectBluetooth(): Promise<void> {
+    console.warn('Web: disconnectBluetooth not supported');
   }
 
   // =========================
-  // USB printer
+  // USB Printer
   // =========================
-  async connectUsb(): Promise<void> {
-    console.warn('Web: connectUsb not supported');
-    return;
+
+  async connectUsbPrinter(): Promise<void> {
+    console.warn('Web: connectUsbPrinter not supported');
   }
 
-  async printUsb(options: { text: string }): Promise<void> {
-    console.log('Web printUsb fallback:', options.text);
-    return;
+  async printUsbText(options: { text: string }): Promise<void> {
+    console.log('Web USB print fallback:', options.text);
   }
 
-  async disconnectUsb(): Promise<void> {
-    console.warn('Web: disconnectUsb not supported');
-    return;
+  async disconnectUsbPrinter(): Promise<void> {
+    console.warn('Web: disconnectUsbPrinter not supported');
   }
 
   // =========================
-  // Thermal printer
+  // Thermal Printer
   // =========================
-  async connectThermal(): Promise<void> {
-    console.warn('Web: connectThermal not supported');
-    return;
+
+  async connectThermalPrinter(): Promise<void> {
+    console.warn('Web: connectThermalPrinter not supported');
   }
 
-  async printThermal(options: { text: string }): Promise<void> {
-    console.log('Web printThermal fallback:', options.text);
-    return;
+  async printThermalText(options: { text: string }): Promise<void> {
+    console.log('Web Thermal print fallback:', options.text);
   }
 
-  async disconnectThermal(): Promise<void> {
-    console.warn('Web: disconnectThermal not supported');
-    return;
+  async disconnectThermalPrinter(): Promise<void> {
+    console.warn('Web: disconnectThermalPrinter not supported');
   }
 }

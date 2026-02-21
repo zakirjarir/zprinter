@@ -13,68 +13,68 @@ npx cap sync
 
 <docgen-index>
 
-* [`scanDevices()`](#scandevices)
-* [`connect(...)`](#connect)
-* [`printText(...)`](#printtext)
-* [`cut()`](#cut)
-* [`disconnect()`](#disconnect)
-* [`connectUsb()`](#connectusb)
-* [`printUsb(...)`](#printusb)
-* [`disconnectUsb()`](#disconnectusb)
-* [`connectThermal()`](#connectthermal)
-* [`printThermal(...)`](#printthermal)
-* [`disconnectThermal()`](#disconnectthermal)
+* [`scanBluetoothDevices()`](#scanbluetoothdevices)
+* [`connectBluetooth(...)`](#connectbluetooth)
+* [`printBluetoothText(...)`](#printbluetoothtext)
+* [`cutBluetoothPaper()`](#cutbluetoothpaper)
+* [`disconnectBluetooth()`](#disconnectbluetooth)
+* [`connectUsbPrinter()`](#connectusbprinter)
+* [`printUsbText(...)`](#printusbtext)
+* [`disconnectUsbPrinter()`](#disconnectusbprinter)
+* [`connectThermalPrinter()`](#connectthermalprinter)
+* [`printThermalText(...)`](#printthermaltext)
+* [`disconnectThermalPrinter()`](#disconnectthermalprinter)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### scanDevices()
+### scanBluetoothDevices()
 
 ```typescript
-scanDevices() => Promise<{ devices: { name: string; address: string; }[]; }>
+scanBluetoothDevices() => Promise<{ devices: { name: string; address: string; }[]; count: number; }>
 ```
 
-**Returns:** <code>Promise&lt;{ devices: { name: string; address: string; }[]; }&gt;</code>
+**Returns:** <code>Promise&lt;{ devices: { name: string; address: string; }[]; count: number; }&gt;</code>
 
 --------------------
 
 
-### connect(...)
+### connectBluetooth(...)
 
 ```typescript
-connect(options: { address: string; }) => Promise<{ connected: boolean; deviceName?: string; deviceAddress?: string; }>
+connectBluetooth(options: { address: string; }) => Promise<{ connected: boolean; deviceName: string; deviceAddress: string; }>
 ```
 
 | Param         | Type                              |
 | ------------- | --------------------------------- |
 | **`options`** | <code>{ address: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ connected: boolean; deviceName?: string; deviceAddress?: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ connected: boolean; deviceName: string; deviceAddress: string; }&gt;</code>
 
 --------------------
 
 
-### printText(...)
+### printBluetoothText(...)
 
 ```typescript
-printText(options: { text: string; }) => Promise<{ printed: boolean; }>
+printBluetoothText(options: { text: string; fontSize?: number; align?: 'left' | 'center' | 'right'; isBold?: boolean; }) => Promise<{ printed: boolean; }>
 ```
 
-| Param         | Type                           |
-| ------------- | ------------------------------ |
-| **`options`** | <code>{ text: string; }</code> |
+| Param         | Type                                                                                                       |
+| ------------- | ---------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ text: string; fontSize?: number; align?: 'left' \| 'center' \| 'right'; isBold?: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
 
 --------------------
 
 
-### cut()
+### cutBluetoothPaper()
 
 ```typescript
-cut() => Promise<{ cut: boolean; }>
+cutBluetoothPaper() => Promise<{ cut: boolean; }>
 ```
 
 **Returns:** <code>Promise&lt;{ cut: boolean; }&gt;</code>
@@ -82,59 +82,28 @@ cut() => Promise<{ cut: boolean; }>
 --------------------
 
 
-### disconnect()
+### disconnectBluetooth()
 
 ```typescript
-disconnect() => Promise<void>
+disconnectBluetooth() => Promise<void>
 ```
 
 --------------------
 
 
-### connectUsb()
+### connectUsbPrinter()
 
 ```typescript
-connectUsb() => Promise<void>
+connectUsbPrinter() => Promise<void>
 ```
 
 --------------------
 
 
-### printUsb(...)
+### printUsbText(...)
 
 ```typescript
-printUsb(options: { text: string; }) => Promise<void>
-```
-
-| Param         | Type                           |
-| ------------- | ------------------------------ |
-| **`options`** | <code>{ text: string; }</code> |
-
---------------------
-
-
-### disconnectUsb()
-
-```typescript
-disconnectUsb() => Promise<void>
-```
-
---------------------
-
-
-### connectThermal()
-
-```typescript
-connectThermal() => Promise<void>
-```
-
---------------------
-
-
-### printThermal(...)
-
-```typescript
-printThermal(options: { text: string; }) => Promise<void>
+printUsbText(options: { text: string; }) => Promise<void>
 ```
 
 | Param         | Type                           |
@@ -144,10 +113,41 @@ printThermal(options: { text: string; }) => Promise<void>
 --------------------
 
 
-### disconnectThermal()
+### disconnectUsbPrinter()
 
 ```typescript
-disconnectThermal() => Promise<void>
+disconnectUsbPrinter() => Promise<void>
+```
+
+--------------------
+
+
+### connectThermalPrinter()
+
+```typescript
+connectThermalPrinter() => Promise<void>
+```
+
+--------------------
+
+
+### printThermalText(...)
+
+```typescript
+printThermalText(options: { text: string; }) => Promise<void>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ text: string; }</code> |
+
+--------------------
+
+
+### disconnectThermalPrinter()
+
+```typescript
+disconnectThermalPrinter() => Promise<void>
 ```
 
 --------------------

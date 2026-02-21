@@ -1,19 +1,22 @@
 import { WebPlugin } from '@capacitor/core';
 export class ZPrinterWeb extends WebPlugin {
     // =========================
-    // Bluetooth printer
+    // Bluetooth Printer
     // =========================
-    async scanDevices() {
-        console.warn('Web: scanDevices not supported');
-        return { devices: [] };
+    async scanBluetoothDevices() {
+        console.warn('Web: scanBluetoothDevices not supported');
+        return { devices: [], count: 0 };
     }
-    async connect() {
-        console.warn('Web: connect not supported for classic Bluetooth printers');
-        return { connected: false };
+    async connectBluetooth() {
+        console.warn('Web: connectBluetooth not supported');
+        return {
+            connected: false,
+            deviceName: '',
+            deviceAddress: '',
+        };
     }
-    async printText(options) {
-        console.log('Web printText fallback:', options.text);
-        // Browser fallback: open print dialog
+    async printBluetoothText(options) {
+        console.log('Web Bluetooth print fallback:', options.text);
         const printWindow = window.open('', '_blank');
         if (printWindow) {
             printWindow.document.write('<pre>' + options.text + '</pre>');
@@ -22,43 +25,36 @@ export class ZPrinterWeb extends WebPlugin {
         }
         return { printed: true };
     }
-    async cut() {
-        console.warn('Web: cut not supported');
+    async cutBluetoothPaper() {
+        console.warn('Web: cutBluetoothPaper not supported');
         return { cut: false };
     }
-    async disconnect() {
-        console.warn('Web: disconnect not supported');
-        return;
+    async disconnectBluetooth() {
+        console.warn('Web: disconnectBluetooth not supported');
     }
     // =========================
-    // USB printer
+    // USB Printer
     // =========================
-    async connectUsb() {
-        console.warn('Web: connectUsb not supported');
-        return;
+    async connectUsbPrinter() {
+        console.warn('Web: connectUsbPrinter not supported');
     }
-    async printUsb(options) {
-        console.log('Web printUsb fallback:', options.text);
-        return;
+    async printUsbText(options) {
+        console.log('Web USB print fallback:', options.text);
     }
-    async disconnectUsb() {
-        console.warn('Web: disconnectUsb not supported');
-        return;
+    async disconnectUsbPrinter() {
+        console.warn('Web: disconnectUsbPrinter not supported');
     }
     // =========================
-    // Thermal printer
+    // Thermal Printer
     // =========================
-    async connectThermal() {
-        console.warn('Web: connectThermal not supported');
-        return;
+    async connectThermalPrinter() {
+        console.warn('Web: connectThermalPrinter not supported');
     }
-    async printThermal(options) {
-        console.log('Web printThermal fallback:', options.text);
-        return;
+    async printThermalText(options) {
+        console.log('Web Thermal print fallback:', options.text);
     }
-    async disconnectThermal() {
-        console.warn('Web: disconnectThermal not supported');
-        return;
+    async disconnectThermalPrinter() {
+        console.warn('Web: disconnectThermalPrinter not supported');
     }
 }
 //# sourceMappingURL=web.js.map

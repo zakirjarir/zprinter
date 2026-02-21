@@ -1,34 +1,38 @@
 export interface ZPrinterPlugin {
-    scanDevices(): Promise<{
+    scanBluetoothDevices(): Promise<{
         devices: {
             name: string;
             address: string;
         }[];
+        count: number;
     }>;
-    connect(options: {
+    connectBluetooth(options: {
         address: string;
     }): Promise<{
         connected: boolean;
-        deviceName?: string;
-        deviceAddress?: string;
+        deviceName: string;
+        deviceAddress: string;
     }>;
-    printText(options: {
+    printBluetoothText(options: {
         text: string;
+        fontSize?: number;
+        align?: 'left' | 'center' | 'right';
+        isBold?: boolean;
     }): Promise<{
         printed: boolean;
     }>;
-    cut(): Promise<{
+    cutBluetoothPaper(): Promise<{
         cut: boolean;
     }>;
-    disconnect(): Promise<void>;
-    connectUsb(): Promise<void>;
-    printUsb(options: {
+    disconnectBluetooth(): Promise<void>;
+    connectUsbPrinter(): Promise<void>;
+    printUsbText(options: {
         text: string;
     }): Promise<void>;
-    disconnectUsb(): Promise<void>;
-    connectThermal(): Promise<void>;
-    printThermal(options: {
+    disconnectUsbPrinter(): Promise<void>;
+    connectThermalPrinter(): Promise<void>;
+    printThermalText(options: {
         text: string;
     }): Promise<void>;
-    disconnectThermal(): Promise<void>;
+    disconnectThermalPrinter(): Promise<void>;
 }
