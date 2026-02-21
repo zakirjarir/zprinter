@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ========================= -->
+    <!-- 📌 UNIVERSAL PRINTER DETECTION -->
+    <!-- ========================= -->
+
+    <!-- Detects ANY printer by class (MUST HAVE) -->
+    <usb-device class="7" />
+    <!-- class="7" = Printer Class - All USB printers fall under this category -->
+    <!-- This single line works with every printer regardless of brand -->
+
+
+    <!-- ========================= -->
+    <!-- 📌 ALL MAJOR PRINTER BRANDS (Vendor IDs) -->
+    <!-- ========================= -->
+
+    <!-- EPSON - Most common in Bangladesh -->
+    <usb-device vendor-id="1046" />
+
+    <!-- STAR Micronics -->
+    <usb-device vendor-id="1137" />
+
+    <!-- ZEBRA - Barcode/Label printers -->
+    <usb-device vendor-id="1155" />
+
+    <!-- CITIZEN -->
+    <usb-device vendor-id="1193" />
+
+    <!-- BROTHER -->
+    <usb-device vendor-id="1208" />
+
+    <!-- SEIKO -->
+    <usb-device vendor-id="1302" />
+
+    <!-- BIXOLON -->
+    <usb-device vendor-id="1504" />
+
+    <!-- HEWLETT-PACKARD (HP) -->
+    <usb-device vendor-id="1008" />
+
+    <!-- CANON -->
+    <usb-device vendor-id="1198" />
+
+    <!-- SAMSUNG -->
+    <usb-device vendor-id="1256" />
+
+    <!-- XEROX -->
+    <usb-device vendor-id="1282" />
+
+    <!-- RICOH -->
+    <usb-device vendor-id="1305" />
+
+    <!-- TOSHIBA -->
+    <usb-device vendor-id="1284" />
+
+    <!-- PANASONIC -->
+    <usb-device vendor-id="1102" />
+
+    <!-- FUJITSU -->
+    <usb-device vendor-id="1056" />
+
+    <!-- OKI -->
+    <usb-device vendor-id="1203" />
+
+    <!-- LEXMARK -->
+    <usb-device vendor-id="1043" />
+
+    <!-- KONICA MINOLTA -->
+    <usb-device vendor-id="1129" />
+
+    <!-- DATAMAX -->
+    <usb-device vendor-id="1151" />
+
+    <!-- INTERMEC -->
+    <usb-device vendor-id="1162" />
+
+    <!-- HONEYWELL -->
+    <usb-device vendor-id="1199" />
+
+    <!-- WEWIN - Thermal printers -->
+    <usb-device vendor-id="1241" />
+
+    <!-- GAINSCHA -->
+    <usb-device vendor-id="1189" />
+
+    <!-- XPRINTER -->
+    <usb-device vendor-id="1285" />
+
+    <!-- RONGTA -->
+    <usb-device vendor-id="1240" />
+
+    <!-- MUNBYN -->
+    <usb-device vendor-id="1250" />
+
+    <!-- PHOMEMO -->
+    <usb-device vendor-id="1260" />
+
+
+    <!-- ========================= -->
+    <!-- 📌 SPECIFIC POPULAR MODELS (For exact matching) -->
+    <!-- ========================= -->
+
+    <!-- EPSON Models -->
+    <usb-device vendor-id="1046" product-id="4096" /> <!-- TM-T20 -->
+    <usb-device vendor-id="1046" product-id="4097" /> <!-- TM-T20 (alternate) -->
+    <usb-device vendor-id="1046" product-id="4098" /> <!-- TM-T20II -->
+    <usb-device vendor-id="1046" product-id="4099" /> <!-- TM-T20II (alternate) -->
+    <usb-device vendor-id="1046" product-id="4100" /> <!-- TM-T70 -->
+    <usb-device vendor-id="1046" product-id="4101" /> <!-- TM-T70 (alternate) -->
+    <usb-device vendor-id="1046" product-id="4102" /> <!-- TM-T81 -->
+    <usb-device vendor-id="1046" product-id="4103" /> <!-- TM-T82 -->
+    <usb-device vendor-id="1046" product-id="4104" /> <!-- TM-T83 -->
+    <usb-device vendor-id="1046" product-id="4105" /> <!-- TM-T88IV -->
+    <usb-device vendor-id="1046" product-id="4106" /> <!-- TM-T88V -->
+    <usb-device vendor-id="1046" product-id="4107" /> <!-- TM-U220 -->
+    <usb-device vendor-id="1046" product-id="4108" /> <!-- TM-U230 -->
+    <usb-device vendor-id="1046" product-id="4109" /> <!-- TM-U375 -->
+    <usb-device vendor-id="1046" product-id="4110" /> <!-- TM-L90 -->
+    <usb-device vendor-id="1046" product-id="4111" /> <!-- TM-H6000 -->
+
+    <!-- STAR Models -->
+    <usb-device vendor-id="1137" product-id="1" />     <!-- TSP100 -->
+    <usb-device vendor-id="1137" product-id="2" />     <!-- TSP100II -->
+    <usb-device vendor-id="1137" product-id="3" />     <!-- TSP700 -->
+    <usb-device vendor-id="1137" product-id="4" />     <!-- TSP800 -->
+    <usb-device vendor-id="1137" product-id="5" />     <!-- SM-S220 -->
+    <usb-device vendor-id="1137" product-id="6" />     <!-- SM-T300 -->
+    <usb-device vendor-id="1137" product-id="7" />     <!-- SP700 -->
+
+    <!-- ZEBRA Models -->
+    <usb-device vendor-id="1155" product-id="1" />     <!-- ZD410 -->
+    <usb-device vendor-id="1155" product-id="2" />     <!-- ZD420 -->
+    <usb-device vendor-id="1155" product-id="3" />     <!-- ZD620 -->
+    <usb-device vendor-id="1155" product-id="4" />     <!-- ZT410 -->
+    <usb-device vendor-id="1155" product-id="5" />     <!-- ZT420 -->
+    <usb-device vendor-id="1155" product-id="6" />     <!-- GC420 -->
+    <usb-device vendor-id="1155" product-id="7" />     <!-- GK420 -->
+    <usb-device vendor-id="1155" product-id="8" />     <!-- GX420 -->
+    <usb-device vendor-id="1155" product-id="9" />     <!-- TLP 2824 -->
+
+    <!-- BIXOLON Models -->
+    <usb-device vendor-id="1504" product-id="1" />     <!-- SRP-350 -->
+    <usb-device vendor-id="1504" product-id="2" />     <!-- SRP-350II -->
+    <usb-device vendor-id="1504" product-id="3" />     <!-- SRP-352 -->
+    <usb-device vendor-id="1504" product-id="4" />     <!-- SRP-352II -->
+    <usb-device vendor-id="1504" product-id="5" />     <!-- SRP-330 -->
+    <usb-device vendor-id="1504" product-id="6" />     <!-- SRP-770 -->
+    <usb-device vendor-id="1504" product-id="7" />     <!-- SRP-275 -->
+
+    <!-- CITIZEN Models -->
+    <usb-device vendor-id="1193" product-id="1" />     <!-- CT-S310 -->
+    <usb-device vendor-id="1193" product-id="2" />     <!-- CT-S281 -->
+    <usb-device vendor-id="1193" product-id="3" />     <!-- CT-S651 -->
+    <usb-device vendor-id="1193" product-id="4" />     <!-- CT-S4000 -->
+    <usb-device vendor-id="1193" product-id="5" />     <!-- CT-S801 -->
+
+    <!-- BROTHER Models -->
+    <usb-device vendor-id="1208" product-id="1" />     <!-- QL-700 -->
+    <usb-device vendor-id="1208" product-id="2" />     <!-- QL-800 -->
+    <usb-device vendor-id="1208" product-id="3" />     <!-- QL-1100 -->
+    <usb-device vendor-id="1208" product-id="4" />     <!-- TD-4000 -->
+    <usb-device vendor-id="1208" product-id="5" />     <!-- TD-4100N -->
+    <usb-device vendor-id="1208" product-id="6" />     <!-- RJ-4030 -->
+
+    <!-- HP Models -->
+    <usb-device vendor-id="1008" product-id="1" />     <!-- LaserJet Pro -->
+    <usb-device vendor-id="1008" product-id="2" />     <!-- DeskJet Series -->
+    <usb-device vendor-id="1008" product-id="3" />     <!-- OfficeJet Series -->
+
+    <!-- CANON Models -->
+    <usb-device vendor-id="1198" product-id="1" />     <!-- PIXMA Series -->
+    <usb-device vendor-id="1198" product-id="2" />     <!-- imageCLASS Series -->
+    <usb-device vendor-id="1198" product-id="3" />     <!-- SELPHY Series -->
+
+
+    <!-- ========================= -->
+    <!-- 📌 PRINTER CLASSES (Additional) -->
+    <!-- ========================= -->
+
+    <!-- Interface class for printers -->
+    <usb-device class="7" subclass="1" />      <!-- Printer subclass -->
+    <usb-device class="7" subclass="1" protocol="1" /> <!-- Unidirectional -->
+    <usb-device class="7" subclass="1" protocol="2" /> <!-- Bidirectional -->
+    <usb-device class="7" subclass="1" protocol="3" /> <!-- IEEE 1284.4 -->
+    <usb-device class="7" subclass="1" protocol="4" /> <!-- Vendor specific -->
+
+
+    <!-- ========================= -->
+    <!-- 📌 NOTES -->
+    <!-- ========================= -->
+
+    <!--
+        💡 The first line <usb-device class="7" /> is the MOST IMPORTANT
+        💡 It automatically detects ANY printer by class
+        💡 All other lines are optional but help with specific models
+        💡 You can add more vendor/product IDs as needed
+        💡 More specific entries = faster detection for those models
+    -->
+
+</resources>
