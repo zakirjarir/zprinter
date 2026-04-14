@@ -3,7 +3,6 @@ package com.zprinter.app.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -14,11 +13,17 @@ public class BluetoothConnection {
 
     public OutputStream connect(String address) throws Exception {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null) {
+            throw new Exception("Bluetooth is not supported");
+        }
+
+        if (adapter.isDiscovering()) {
+            adapter.cancelDiscovery();
+        }
+
         BluetoothDevice device = adapter.getRemoteDevice(address);
 
-        socket = device.createRfcommSocketToServiceRecord(
-                UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-        );
+        socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
 
         socket.connect();
         outputStream = socket.getOutputStream();

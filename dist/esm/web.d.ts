@@ -22,14 +22,32 @@ export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
         cut: boolean;
     }>;
     disconnectBluetooth(): Promise<void>;
-    connectUsbPrinter(): Promise<void>;
+    listUsbPrinters(): Promise<{
+        devices: {
+            deviceName: string;
+            vendorId: number;
+            productId: number;
+        }[];
+        count: number;
+    }>;
+    connectUsbPrinter(): Promise<{
+        connected: boolean;
+        deviceName: string;
+    }>;
     printUsbText(options: {
         text: string;
-    }): Promise<void>;
+    }): Promise<{
+        printed: boolean;
+    }>;
     disconnectUsbPrinter(): Promise<void>;
-    connectThermalPrinter(): Promise<void>;
+    connectThermalPrinter(): Promise<{
+        connected: boolean;
+        deviceName: string;
+    }>;
     printThermalText(options: {
         text: string;
-    }): Promise<void>;
+    }): Promise<{
+        printed: boolean;
+    }>;
     disconnectThermalPrinter(): Promise<void>;
 }

@@ -14,7 +14,6 @@
     <!-- ========================= -->
     <!-- 📌 USB PERMISSIONS -->
     <!-- ========================= -->
-    <uses-permission android:name="android.permission.USB_PERMISSION" />
     <uses-feature android:name="android.hardware.usb.host" android:required="false" />
 
     <application>

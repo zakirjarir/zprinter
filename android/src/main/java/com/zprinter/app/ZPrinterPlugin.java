@@ -1,114 +1,81 @@
 package com.zprinter.app;
 
-import com.getcapacitor.*;
-import com.getcapacitor.annotation.CapacitorPlugin;
+import android.Manifest;
+import android.os.Build;
+import android.util.Log;
+import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
-
-import com.zprinter.app.bluetooth.BluetoothScanner;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import com.zprinter.app.bluetooth.BluetoothConnection;
 import com.zprinter.app.bluetooth.BluetoothPrinter;
-import com.zprinter.app.usb.UsbPrinterManager;
+import com.zprinter.app.bluetooth.BluetoothScanner;
 import com.zprinter.app.usb.ThermalPrinterManager;
+import com.zprinter.app.usb.UsbPrinterManager;
 
-import android.content.pm.PackageManager;
-import android.util.Log;
-
-@CapacitorPlugin(name = "ZPrinter", requestCodes = {
-        ZPrinterPlugin.REQUEST_BLUETOOTH_PERMISSIONS
-})
+@CapacitorPlugin(
+    name = "ZPrinter",
+    permissions = {
+        @Permission(
+            alias = "bluetooth",
+            strings = {
+                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION
+            }
+        )
+    }
+)
 public class ZPrinterPlugin extends Plugin {
 
     private static final String TAG = "ZPrinterPlugin";
-    public static final int REQUEST_BLUETOOTH_PERMISSIONS = 10001;
 
-    // =========================
-    // Bluetooth
-    // =========================
     private BluetoothScanner bluetoothScanner;
     private BluetoothConnection bluetoothConnection;
     private BluetoothPrinter bluetoothPrinter;
-
-    // =========================
-    // USB & Thermal
-    // =========================
     private UsbPrinterManager usbPrinterManager;
     private ThermalPrinterManager thermalPrinterManager;
 
-    // Store calls for async operations
     private PluginCall pendingScanCall;
-    private PluginCall pendingUsbCall;
-    private PluginCall pendingThermalCall;
 
     @Override
     public void load() {
-        super.load();
-        initializeComponents();
+        bluetoothScanner = new BluetoothScanner();
+        bluetoothConnection = new BluetoothConnection();
+        bluetoothPrinter = new BluetoothPrinter();
+        usbPrinterManager = new UsbPrinterManager();
+        thermalPrinterManager = new ThermalPrinterManager();
     }
 
-    private void initializeComponents() {
-        try {
-            bluetoothScanner = new BluetoothScanner();
-            bluetoothConnection = new BluetoothConnection();
-            bluetoothPrinter = new BluetoothPrinter();
-            usbPrinterManager = new UsbPrinterManager();
-            thermalPrinterManager = new ThermalPrinterManager();
-            Log.d(TAG, "Components initialized successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to initialize components: " + e.getMessage());
-        }
-    }
-
-    // =========================
-    // 1. BLUETOOTH PRINTER METHODS
-    // =========================
-
-    /**
-     * Scan for Bluetooth devices
-     * Maps to: scanDevices()
-     */
     @PluginMethod
     public void scanBluetoothDevices(PluginCall call) {
         pendingScanCall = call;
 
-        try {
-            bluetoothScanner.scan(getActivity(), new BluetoothScanner.ScanListener() {
-                @Override
-                public void onFinished(JSArray devices) {
-                    if (pendingScanCall != null) {
-                        JSObject result = new JSObject();
-                        result.put("devices", devices);
-                        result.put("count", devices.length());
-                        pendingScanCall.resolve(result);
-                        pendingScanCall = null;
-                    }
-                }
-
-                @Override
-                public void onError(String message) {
-                    if (pendingScanCall != null) {
-                        pendingScanCall.reject(message);
-                        pendingScanCall = null;
-                    }
-                }
-
-                @Override
-                public void onProgress(JSObject device) {
-                    if (pendingScanCall != null) {
-                        notifyListeners("scanProgress", device);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            call.reject("Scan failed: " + e.getMessage());
-            pendingScanCall = null;
+        if (requiresBluetoothRuntimePermission() && !hasRequiredPermissions()) {
+            requestPermissionForAlias("bluetooth", call, "bluetoothPermissionCallback");
+            return;
         }
+
+        startBluetoothScan(call);
     }
 
-    /**
-     * Connect to Bluetooth printer
-     * Maps to: connect(options)
-     */
+    @PermissionCallback
+    private void bluetoothPermissionCallback(PluginCall call) {
+        if (getPermissionState("bluetooth") != com.getcapacitor.PermissionState.GRANTED) {
+            if (pendingScanCall != null) {
+                pendingScanCall.reject("Bluetooth permission denied");
+                pendingScanCall = null;
+            }
+            return;
+        }
+
+        PluginCall effectiveCall = pendingScanCall != null ? pendingScanCall : call;
+        startBluetoothScan(effectiveCall);
+    }
+
     @PluginMethod
     public void connectBluetooth(PluginCall call) {
         String address = call.getString("address", "");
@@ -120,323 +87,199 @@ public class ZPrinterPlugin extends Plugin {
         try {
             bluetoothConnection.connect(address);
 
-            // Try to get device name (you might want to cache this from scan)
-            String deviceName = "Bluetooth Printer"; // Default name
-
             JSObject result = new JSObject();
             result.put("connected", true);
+            result.put("deviceName", "Bluetooth Printer");
             result.put("deviceAddress", address);
-            result.put("deviceName", deviceName);
             call.resolve(result);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Connect failed: " + e.getMessage());
-            call.reject("Bluetooth connect failed: " + e.getMessage());
+        } catch (Exception exception) {
+            Log.e(TAG, "Bluetooth connect failed", exception);
+            call.reject("Bluetooth connect failed: " + exception.getMessage());
         }
     }
 
-    /**
-     * Print text on Bluetooth printer
-     * Maps to: printText(options)
-     */
     @PluginMethod
     public void printBluetoothText(PluginCall call) {
         String text = call.getString("text", "");
-        Integer fontSize = call.getInt("fontSize", 24);
-        String align = call.getString("align", "left");
-        Boolean isBold = call.getBoolean("isBold", false);
-
         if (text.isEmpty()) {
-            call.reject("Text is empty");
+            call.reject("Text is required");
             return;
         }
 
         try {
-            // Format text with ESC/POS commands
-            String formattedText = formatText(text, fontSize, align, isBold);
-            bluetoothPrinter.print(bluetoothConnection.getOutputStream(), formattedText);
+            byte[] payload = PrinterPayloadFormatter.formatText(
+                text,
+                call.getInt("fontSize", 24),
+                call.getString("align", "left"),
+                call.getBoolean("isBold", false),
+                call.getInt("feedLines", 2)
+            );
+
+            bluetoothPrinter.print(bluetoothConnection.getOutputStream(), payload);
 
             JSObject result = new JSObject();
             result.put("printed", true);
             call.resolve(result);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Print failed: " + e.getMessage());
-            call.reject("Bluetooth print failed: " + e.getMessage());
+        } catch (Exception exception) {
+            Log.e(TAG, "Bluetooth print failed", exception);
+            call.reject("Bluetooth print failed: " + exception.getMessage());
         }
     }
 
-    /**
-     * Format text with ESC/POS commands
-     */
-    private String formatText(String text, int fontSize, String align, boolean isBold) {
-        StringBuilder formatted = new StringBuilder();
-
-        // Initialize printer
-        formatted.append((char) 0x1B).append((char) 0x40); // ESC @
-
-        // Bold
-        if (isBold) {
-            formatted.append((char) 0x1B).append((char) 0x45).append((char) 0x01); // ESC E 1
-        }
-
-        // Alignment
-        switch (align) {
-            case "center":
-                formatted.append((char) 0x1B).append((char) 0x61).append((char) 0x01); // ESC a 1
-                break;
-            case "right":
-                formatted.append((char) 0x1B).append((char) 0x61).append((char) 0x02); // ESC a 2
-                break;
-            default: // left
-                formatted.append((char) 0x1B).append((char) 0x61).append((char) 0x00); // ESC a 0
-        }
-
-        // Font size (GS ! n)
-        int sizeCode = 0;
-        if (fontSize >= 48) sizeCode = 0x33; // 3x3
-        else if (fontSize >= 32) sizeCode = 0x22; // 2x2
-        else if (fontSize >= 24) sizeCode = 0x11; // 1.5x1.5
-        else sizeCode = 0x00; // normal
-
-        formatted.append((char) 0x1D).append((char) 0x21).append((char) sizeCode); // GS ! n
-
-        // Text
-        formatted.append(text).append("\n");
-
-        // Reset
-        if (isBold) {
-            formatted.append((char) 0x1B).append((char) 0x45).append((char) 0x00); // ESC E 0
-        }
-
-        return formatted.toString();
-    }
-
-    /**
-     * Cut paper on Bluetooth printer
-     * Maps to: cut()
-     */
     @PluginMethod
     public void cutBluetoothPaper(PluginCall call) {
         try {
-            bluetoothPrinter.cut(bluetoothConnection.getOutputStream());
-
+            bluetoothPrinter.cut(bluetoothConnection.getOutputStream(), PrinterPayloadFormatter.cut());
             JSObject result = new JSObject();
             result.put("cut", true);
             call.resolve(result);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Cut failed: " + e.getMessage());
-            call.reject("Bluetooth cut failed: " + e.getMessage());
+        } catch (Exception exception) {
+            Log.e(TAG, "Bluetooth cut failed", exception);
+            call.reject("Bluetooth cut failed: " + exception.getMessage());
         }
     }
 
-    /**
-     * Disconnect Bluetooth printer
-     * Maps to: disconnect()
-     */
     @PluginMethod
     public void disconnectBluetooth(PluginCall call) {
         try {
             bluetoothConnection.disconnect();
-            call.resolve(); // Promise<void>
-
-        } catch (Exception e) {
-            Log.e(TAG, "Disconnect failed: " + e.getMessage());
-            call.reject("Bluetooth disconnect failed: " + e.getMessage());
+            call.resolve();
+        } catch (Exception exception) {
+            call.reject("Bluetooth disconnect failed: " + exception.getMessage());
         }
     }
 
-    // =========================
-    // 2. USB PRINTER METHODS (ADDED)
-    // =========================
+    @PluginMethod
+    public void listUsbPrinters(PluginCall call) {
+        JSArray devices = usbPrinterManager.listPrinters(getContext());
+        JSObject result = new JSObject();
+        result.put("devices", devices);
+        result.put("count", devices.length());
+        call.resolve(result);
+    }
 
-    /**
-     * Connect to USB printer
-     * Maps to: connectUsb()
-     */
     @PluginMethod
     public void connectUsbPrinter(PluginCall call) {
-        pendingUsbCall = call;
-
-        try {
-            usbPrinterManager.connect(getContext(), new UsbPrinterManager.UsbListener() {
-                @Override
-                public void onConnected(String deviceName) {
-                    if (pendingUsbCall != null) {
-                        pendingUsbCall.resolve(); // Promise<void>
-                        pendingUsbCall = null;
-                    }
-                }
-
-                @Override
-                public void onError(String message) {
-                    if (pendingUsbCall != null) {
-                        pendingUsbCall.reject("USB connection failed: " + message);
-                        pendingUsbCall = null;
-                    }
-                }
-            });
-        } catch (Exception e) {
-            call.reject("USB connect error: " + e.getMessage());
-            pendingUsbCall = null;
-        }
+        connectUsbPrinterInternal(call, usbPrinterManager, false);
     }
 
-    /**
-     * Print text on USB printer
-     * Maps to: printUsb(options)
-     */
     @PluginMethod
     public void printUsbText(PluginCall call) {
-        String text = call.getString("text", "");
-        if (text.isEmpty()) {
-            call.reject("Text is empty");
-            return;
-        }
-
-        try {
-            usbPrinterManager.print(text.getBytes(), new UsbPrinterManager.UsbListener() {
-                @Override
-                public void onConnected(String msg) {
-                    call.resolve(); // Promise<void>
-                }
-
-                @Override
-                public void onError(String message) {
-                    call.reject("USB print failed: " + message);
-                }
-            });
-        } catch (Exception e) {
-            call.reject("USB print error: " + e.getMessage());
-        }
+        printUsbTextInternal(call, usbPrinterManager, "USB");
     }
 
-    /**
-     * Disconnect USB printer
-     * Maps to: disconnectUsb()
-     */
     @PluginMethod
     public void disconnectUsbPrinter(PluginCall call) {
-        try {
-            usbPrinterManager.close();
-            call.resolve(); // Promise<void>
-
-        } catch (Exception e) {
-            call.reject("USB disconnect failed: " + e.getMessage());
-        }
+        usbPrinterManager.close();
+        call.resolve();
     }
 
-    // =========================
-    // 3. THERMAL PRINTER METHODS (ADDED)
-    // =========================
-
-    /**
-     * Connect to Thermal printer
-     * Maps to: connectThermal()
-     */
     @PluginMethod
     public void connectThermalPrinter(PluginCall call) {
-        pendingThermalCall = call;
+        connectUsbPrinterInternal(call, thermalPrinterManager, true);
+    }
 
-        try {
-            thermalPrinterManager.connect(getContext(), new ThermalPrinterManager.ThermalListener() {
+    @PluginMethod
+    public void printThermalText(PluginCall call) {
+        printUsbTextInternal(call, thermalPrinterManager, "Thermal");
+    }
+
+    @PluginMethod
+    public void disconnectThermalPrinter(PluginCall call) {
+        thermalPrinterManager.close();
+        call.resolve();
+    }
+
+    private void startBluetoothScan(PluginCall call) {
+        bluetoothScanner.scan(
+            getActivity(),
+            new BluetoothScanner.ScanListener() {
                 @Override
-                public void onConnected(String deviceName) {
-                    if (pendingThermalCall != null) {
-                        pendingThermalCall.resolve(); // Promise<void>
-                        pendingThermalCall = null;
-                    }
+                public void onFinished(JSArray devices) {
+                    JSObject result = new JSObject();
+                    result.put("devices", devices);
+                    result.put("count", devices.length());
+                    call.resolve(result);
+                    pendingScanCall = null;
                 }
 
                 @Override
                 public void onError(String message) {
-                    if (pendingThermalCall != null) {
-                        pendingThermalCall.reject("Thermal connection failed: " + message);
-                        pendingThermalCall = null;
-                    }
+                    call.reject(message);
+                    pendingScanCall = null;
                 }
-            });
-        } catch (Exception e) {
-            call.reject("Thermal connect error: " + e.getMessage());
-            pendingThermalCall = null;
-        }
+
+                @Override
+                public void onProgress(JSObject device) {
+                    notifyListeners("scanProgress", device);
+                }
+            }
+        );
     }
 
-    /**
-     * Print text on Thermal printer
-     * Maps to: printThermal(options)
-     */
-    @PluginMethod
-    public void printThermalText(PluginCall call) {
+    private void connectUsbPrinterInternal(PluginCall call, UsbPrinterManager manager, boolean thermal) {
+        Integer vendorId = call.getInt("vendorId");
+        Integer productId = call.getInt("productId");
+        String deviceName = call.getString("deviceName");
+
+        manager.connect(
+            getContext(),
+            vendorId,
+            productId,
+            deviceName,
+            new UsbPrinterManager.UsbListener() {
+                @Override
+                public void onConnected(JSObject device) {
+                    JSObject result = new JSObject();
+                    result.put("connected", true);
+                    result.put("deviceName", device.getString("deviceName"));
+                    result.put("vendorId", device.getInteger("vendorId"));
+                    result.put("productId", device.getInteger("productId"));
+                    call.resolve(result);
+                }
+
+                @Override
+                public void onError(String message) {
+                    call.reject((thermal ? "Thermal" : "USB") + " connection failed: " + message);
+                }
+            }
+        );
+    }
+
+    private void printUsbTextInternal(PluginCall call, UsbPrinterManager manager, String printerType) {
         String text = call.getString("text", "");
         if (text.isEmpty()) {
-            call.reject("Text is empty");
+            call.reject("Text is required");
             return;
         }
 
-        try {
-            thermalPrinterManager.print(text.getBytes(), new ThermalPrinterManager.ThermalListener() {
+        byte[] payload = PrinterPayloadFormatter.formatText(
+            text,
+            call.getInt("fontSize", 24),
+            call.getString("align", "left"),
+            call.getBoolean("isBold", false),
+            call.getInt("feedLines", 2)
+        );
+
+        manager.print(
+            payload,
+            new UsbPrinterManager.UsbListener() {
                 @Override
-                public void onConnected(String msg) {
-                    call.resolve(); // Promise<void>
+                public void onConnected(JSObject device) {
+                    JSObject result = new JSObject();
+                    result.put("printed", true);
+                    call.resolve(result);
                 }
 
                 @Override
                 public void onError(String message) {
-                    call.reject("Thermal print failed: " + message);
+                    call.reject(printerType + " print failed: " + message);
                 }
-            });
-        } catch (Exception e) {
-            call.reject("Thermal print error: " + e.getMessage());
-        }
+            }
+        );
     }
 
-    /**
-     * Disconnect Thermal printer
-     * Maps to: disconnectThermal()
-     */
-    @PluginMethod
-    public void disconnectThermalPrinter(PluginCall call) {
-        try {
-            thermalPrinterManager.close();
-            call.resolve(); // Promise<void>
-
-        } catch (Exception e) {
-            call.reject("Thermal disconnect failed: " + e.getMessage());
-        }
-    }
-
-    // =========================
-    // 4. PERMISSION HANDLING (FIXED)
-    // =========================
-
-    @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
-            boolean allGranted = true;
-
-            // ✅ Fixed: Added null check
-            if (grantResults != null && grantResults.length > 0) {
-                for (int result : grantResults) {
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        allGranted = false;
-                        break;
-                    }
-                }
-            } else {
-                allGranted = false;
-            }
-
-            if (allGranted && pendingScanCall != null) {
-                // Retry scan
-                scanBluetoothDevices(pendingScanCall);
-            } else if (pendingScanCall != null) {
-                pendingScanCall.reject("Bluetooth permissions denied");
-                pendingScanCall = null;
-            }
-        }
+    private boolean requiresBluetoothRuntimePermission() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 }

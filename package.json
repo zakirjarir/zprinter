@@ -5,6 +5,14 @@
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/plugin.cjs.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
   "unpkg": "dist/plugin.js",
   "files": [
     "android/src/main/",
@@ -19,10 +27,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zakirjarir/zprinter.git.git"
+    "url": "git+https://github.com/zakirjarir/zprinter.git"
   },
   "bugs": {
-    "url": "https://github.com/zakirjarir/zprinter.git/issues"
+    "url": "https://github.com/zakirjarir/zprinter/issues"
   },
   "keywords": [
     "capacitor",

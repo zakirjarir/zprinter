@@ -7,17 +7,19 @@
     "methods": [
       {
         "name": "scanBluetoothDevices",
-        "signature": "() => Promise<{ devices: { name: string; address: string; }[]; count: number; }>",
+        "signature": "() => Promise<{ devices: BluetoothPrinterDevice[]; count: number; }>",
         "parameters": [],
-        "returns": "Promise<{ devices: { name: string; address: string; }[]; count: number; }>",
+        "returns": "Promise<{ devices: BluetoothPrinterDevice[]; count: number; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "BluetoothPrinterDevice"
+        ],
         "slug": "scanbluetoothdevices"
       },
       {
         "name": "connectBluetooth",
-        "signature": "(options: { address: string; }) => Promise<{ connected: boolean; deviceName: string; deviceAddress: string; }>",
+        "signature": "(options: { address: string; }) => Promise<PrinterConnectionResult>",
         "parameters": [
           {
             "name": "options",
@@ -25,26 +27,30 @@
             "type": "{ address: string; }"
           }
         ],
-        "returns": "Promise<{ connected: boolean; deviceName: string; deviceAddress: string; }>",
+        "returns": "Promise<PrinterConnectionResult>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterConnectionResult"
+        ],
         "slug": "connectbluetooth"
       },
       {
         "name": "printBluetoothText",
-        "signature": "(options: { text: string; fontSize?: number; align?: 'left' | 'center' | 'right'; isBold?: boolean; }) => Promise<{ printed: boolean; }>",
+        "signature": "(options: PrinterTextOptions) => Promise<{ printed: boolean; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ text: string; fontSize?: number | undefined; align?: 'left' | 'center' | 'right' | undefined; isBold?: boolean | undefined; }"
+            "type": "PrinterTextOptions"
           }
         ],
         "returns": "Promise<{ printed: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterTextOptions"
+        ],
         "slug": "printbluetoothtext"
       },
       {
@@ -68,29 +74,52 @@
         "slug": "disconnectbluetooth"
       },
       {
-        "name": "connectUsbPrinter",
-        "signature": "() => Promise<void>",
+        "name": "listUsbPrinters",
+        "signature": "() => Promise<{ devices: UsbPrinterDevice[]; count: number; }>",
         "parameters": [],
-        "returns": "Promise<void>",
+        "returns": "Promise<{ devices: UsbPrinterDevice[]; count: number; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
-        "slug": "connectusbprinter"
+        "complexTypes": [
+          "UsbPrinterDevice"
+        ],
+        "slug": "listusbprinters"
       },
       {
-        "name": "printUsbText",
-        "signature": "(options: { text: string; }) => Promise<void>",
+        "name": "connectUsbPrinter",
+        "signature": "(options?: UsbPrinterConnectOptions | undefined) => Promise<PrinterConnectionResult>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ text: string; }"
+            "type": "UsbPrinterConnectOptions | undefined"
           }
         ],
-        "returns": "Promise<void>",
+        "returns": "Promise<PrinterConnectionResult>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterConnectionResult",
+          "UsbPrinterConnectOptions"
+        ],
+        "slug": "connectusbprinter"
+      },
+      {
+        "name": "printUsbText",
+        "signature": "(options: PrinterTextOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterTextOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterTextOptions"
+        ],
         "slug": "printusbtext"
       },
       {
@@ -105,28 +134,39 @@
       },
       {
         "name": "connectThermalPrinter",
-        "signature": "() => Promise<void>",
-        "parameters": [],
-        "returns": "Promise<void>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "connectthermalprinter"
-      },
-      {
-        "name": "printThermalText",
-        "signature": "(options: { text: string; }) => Promise<void>",
+        "signature": "(options?: UsbPrinterConnectOptions | undefined) => Promise<PrinterConnectionResult>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ text: string; }"
+            "type": "UsbPrinterConnectOptions | undefined"
           }
         ],
-        "returns": "Promise<void>",
+        "returns": "Promise<PrinterConnectionResult>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterConnectionResult",
+          "UsbPrinterConnectOptions"
+        ],
+        "slug": "connectthermalprinter"
+      },
+      {
+        "name": "printThermalText",
+        "signature": "(options: PrinterTextOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterTextOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterTextOptions"
+        ],
         "slug": "printthermaltext"
       },
       {
@@ -142,7 +182,207 @@
     ],
     "properties": []
   },
-  "interfaces": [],
+  "interfaces": [
+    {
+      "name": "BluetoothPrinterDevice",
+      "slug": "bluetoothprinterdevice",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "name",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "isPaired",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterConnectionResult",
+      "slug": "printerconnectionresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "connected",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "deviceName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "deviceAddress",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "vendorId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "productId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterTextOptions",
+      "slug": "printertextoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "text",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "fontSize",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "align",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'left' | 'center' | 'right' | undefined"
+        },
+        {
+          "name": "isBold",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "UsbPrinterDevice",
+      "slug": "usbprinterdevice",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "deviceName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "vendorId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "productId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "manufacturerName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "productName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "deviceClass",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "UsbPrinterConnectOptions",
+      "slug": "usbprinterconnectoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "vendorId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "productId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "deviceName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    }
+  ],
   "enums": [],
   "typeAliases": [],
   "pluginConfigs": []

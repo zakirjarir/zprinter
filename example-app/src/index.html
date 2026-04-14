@@ -1,24 +1,193 @@
 <!doctype html>
-<html lang="en" dir="ltr" class="hydrated">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Example Capacitor App</title>
+    <title>ZPrinter Example</title>
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="format-detection" content="telephone=no" />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5efe4;
+        --panel: #fffaf2;
+        --ink: #1f1b16;
+        --muted: #6e6256;
+        --accent: #0f766e;
+        --accent-2: #b45309;
+        --border: #d9c7ad;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at top right, rgba(180, 83, 9, 0.18), transparent 28%),
+          linear-gradient(180deg, #f8f2e8 0%, var(--bg) 100%);
+        color: var(--ink);
+      }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px 16px 80px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 2rem;
+      }
+
+      p,
+      label,
+      small {
+        color: var(--muted);
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        margin-top: 16px;
+        box-shadow: 0 14px 40px rgba(31, 27, 22, 0.08);
+      }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      @media (min-width: 720px) {
+        .grid.two {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      textarea,
+      input,
+      select,
+      button {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 12px 14px;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      button {
+        cursor: pointer;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+      }
+
+      button.secondary {
+        background: var(--accent-2);
+      }
+
+      button.ghost {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--border);
+      }
+
+      .row {
+        display: grid;
+        gap: 10px;
+      }
+
+      @media (min-width: 640px) {
+        .row {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: #201a14;
+        color: #f9f4ea;
+        border-radius: 14px;
+        padding: 14px;
+        min-height: 140px;
+      }
+    </style>
   </head>
   <body>
     <main>
-      <h1>Capacitor Test Plugin Project</h1>
-      <p>
-        This project can be used to test out the functionality of your plugin. Nothing in the
-        <em>example-app/</em> folder will be published to npm when using this template, so you can create away!
-      </p>
-      <label for="echoInput">Echo Text:</label>
-      <input type="text" id="echoInput" name="echoInput" value="Hello World!" />
-      <button onclick="testEcho()">Click Me!</button>
+      <h1>ZPrinter Demo</h1>
+      <p>Use this app on a Capacitor device build to scan printers, connect, and send ESC/POS text output.</p>
+
+      <section class="panel">
+        <div class="grid">
+          <label for="printText">Receipt Text</label>
+          <textarea id="printText">Demo Invoice
+Item A x1    100
+Item B x2    180
+Total        280
+Thank you</textarea>
+          <div class="row">
+            <input id="fontSize" type="number" value="24" min="12" max="48" placeholder="Font Size" />
+            <select id="align">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+            <input id="feedLines" type="number" value="2" min="1" max="6" placeholder="Feed Lines" />
+          </div>
+          <label><input id="isBold" type="checkbox" /> Bold text</label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Bluetooth Printer</h2>
+        <div class="row">
+          <button id="scanBluetooth">Scan Bluetooth</button>
+          <button id="printBluetooth" class="secondary">Print Bluetooth</button>
+          <button id="cutBluetooth" class="ghost">Cut Paper</button>
+        </div>
+        <div class="grid two" style="margin-top: 12px;">
+          <select id="bluetoothDevices"></select>
+          <button id="disconnectBluetooth" class="ghost">Disconnect Bluetooth</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>USB / Thermal Printer</h2>
+        <div class="row">
+          <button id="listUsb">List USB Printers</button>
+          <button id="connectUsb" class="secondary">Connect USB</button>
+          <button id="connectThermal" class="secondary">Connect Thermal</button>
+        </div>
+        <div class="grid two" style="margin-top: 12px;">
+          <select id="usbDevices"></select>
+          <button id="printUsb">Print USB</button>
+        </div>
+        <div class="row" style="margin-top: 12px;">
+          <button id="printThermal">Print Thermal</button>
+          <button id="disconnectUsb" class="ghost">Disconnect USB</button>
+          <button id="disconnectThermal" class="ghost">Disconnect Thermal</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Log</h2>
+        <pre id="log"></pre>
+      </section>
     </main>
 
     <script src="./js/example.js" type="module"></script>

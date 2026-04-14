@@ -1,8 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
 export class ZPrinterWeb extends WebPlugin {
-    // =========================
-    // Bluetooth Printer
-    // =========================
     async scanBluetoothDevices() {
         console.warn('Web: scanBluetoothDevices not supported');
         return { devices: [], count: 0 };
@@ -32,26 +29,34 @@ export class ZPrinterWeb extends WebPlugin {
     async disconnectBluetooth() {
         console.warn('Web: disconnectBluetooth not supported');
     }
-    // =========================
-    // USB Printer
-    // =========================
+    async listUsbPrinters() {
+        console.warn('Web: listUsbPrinters not supported');
+        return { devices: [], count: 0 };
+    }
     async connectUsbPrinter() {
         console.warn('Web: connectUsbPrinter not supported');
+        return {
+            connected: false,
+            deviceName: '',
+        };
     }
     async printUsbText(options) {
         console.log('Web USB print fallback:', options.text);
+        return { printed: true };
     }
     async disconnectUsbPrinter() {
         console.warn('Web: disconnectUsbPrinter not supported');
     }
-    // =========================
-    // Thermal Printer
-    // =========================
     async connectThermalPrinter() {
         console.warn('Web: connectThermalPrinter not supported');
+        return {
+            connected: false,
+            deviceName: '',
+        };
     }
     async printThermalText(options) {
         console.log('Web Thermal print fallback:', options.text);
+        return { printed: true };
     }
     async disconnectThermalPrinter() {
         console.warn('Web: disconnectThermalPrinter not supported');

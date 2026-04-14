@@ -22,9 +22,13 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>UILaunchStoryboardName</key>
+		<key>LSRequiresIPhoneOS</key>
+		<true/>
+		<key>NSBluetoothAlwaysUsageDescription</key>
+		<string>This app uses Bluetooth to discover and print to receipt printers.</string>
+		<key>NSBluetoothPeripheralUsageDescription</key>
+		<string>This app uses Bluetooth to discover and print to receipt printers.</string>
+		<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>

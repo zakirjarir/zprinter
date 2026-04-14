@@ -1,11 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
+
 import type { ZPrinterPlugin } from './definitions';
 
 export class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
-  // =========================
-  // Bluetooth Printer
-  // =========================
-
   async scanBluetoothDevices(): Promise<{
     devices: { name: string; address: string }[];
     count: number;
@@ -49,32 +46,52 @@ export class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
     console.warn('Web: disconnectBluetooth not supported');
   }
 
-  // =========================
-  // USB Printer
-  // =========================
-
-  async connectUsbPrinter(): Promise<void> {
-    console.warn('Web: connectUsbPrinter not supported');
+  async listUsbPrinters(): Promise<{
+    devices: {
+      deviceName: string;
+      vendorId: number;
+      productId: number;
+    }[];
+    count: number;
+  }> {
+    console.warn('Web: listUsbPrinters not supported');
+    return { devices: [], count: 0 };
   }
 
-  async printUsbText(options: { text: string }): Promise<void> {
+  async connectUsbPrinter(): Promise<{
+    connected: boolean;
+    deviceName: string;
+  }> {
+    console.warn('Web: connectUsbPrinter not supported');
+    return {
+      connected: false,
+      deviceName: '',
+    };
+  }
+
+  async printUsbText(options: { text: string }): Promise<{ printed: boolean }> {
     console.log('Web USB print fallback:', options.text);
+    return { printed: true };
   }
 
   async disconnectUsbPrinter(): Promise<void> {
     console.warn('Web: disconnectUsbPrinter not supported');
   }
 
-  // =========================
-  // Thermal Printer
-  // =========================
-
-  async connectThermalPrinter(): Promise<void> {
+  async connectThermalPrinter(): Promise<{
+    connected: boolean;
+    deviceName: string;
+  }> {
     console.warn('Web: connectThermalPrinter not supported');
+    return {
+      connected: false,
+      deviceName: '',
+    };
   }
 
-  async printThermalText(options: { text: string }): Promise<void> {
+  async printThermalText(options: { text: string }): Promise<{ printed: boolean }> {
     console.log('Web Thermal print fallback:', options.text);
+    return { printed: true };
   }
 
   async disconnectThermalPrinter(): Promise<void> {
