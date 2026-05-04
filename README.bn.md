@@ -6,7 +6,11 @@
 
 <p>একটি নেটিভ Capacitor প্লাগইন যা Ionic/Capacitor অ্যাপকে থার্মাল রিসিট প্রিন্টারে প্রিন্ট করতে সক্ষম করে — <strong>ব্লুটুথ</strong>, <strong>USB</strong> (Android), অথবা <strong>নেটওয়ার্ক (TCP/IP)</strong> এর মাধ্যমে।</p>
 
-<p align="center">🌐 ভাষা / Language:  [🇧🇩 বাংলা — আপনি এখানে](./README.bn.md) &nbsp;&nbsp; [🇬🇧 English](./README.md)</p>
+<p align="center">
+
+[![বাংলা](https://img.shields.io/badge/%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE-%E0%A6%AA%E0%A6%A5%E0%A6%A8-orange?style=for-the-badge)](https://github.com/zakirjarir/zprinter/blob/main/README.bn.md) &nbsp; [![English](https://img.shields.io/badge/English-Read-blue?style=for-the-badge&logo=github)](https://github.com/zakirjarir/zprinter/blob/main/README.md)
+
+</p>
 
 <br/>
 
