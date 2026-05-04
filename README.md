@@ -1,78 +1,101 @@
-# ZPrinter — Capacitor Thermal Printer Plugin (English)
+<div align="center">
 
-ZPrinter is a native Capacitor plugin that enables Ionic/Capacitor apps to print to thermal receipt printers using Bluetooth, USB (Android), or Network (TCP/IP). This README is a complete, detailed guide covering installation, native setup, API, examples, development and troubleshooting.
+<img src="https://img.shields.io/badge/ZPrinter-Capacitor%20Plugin-6C63FF?style=for-the-badge&logo=ionic&logoColor=white" alt="ZPrinter" />
 
-Table of contents
-- Quick summary
-- Features
-- Installation (preferred: GitHub package)
-- Native setup (Android & iOS)
-- Usage examples (Bluetooth, USB, Network, Image, QR)
-- API reference (methods and options)
-- Example app & local development
-- Building, testing and publishing
-- Troubleshooting & FAQ
-- Contributing & Support
-- License
+<h1>🖨️ ZPrinter — Capacitor Printer Plugin</h1>
 
----
+<p>A native Capacitor plugin that enables Ionic/Capacitor apps to print to thermal receipt printers via <strong>Bluetooth</strong>, <strong>USB</strong> (Android), or <strong>Network (TCP/IP)</strong>.</p>
 
-Quick summary
+<br/>
+<p align="center">🌐 Language / ভাষা:  [🇬🇧 English — You\'re Here](./README.md) &nbsp;&nbsp; [🇧🇩 বাংলা](./README.bn.md)</p>
+<br/>
 
-- Supports: Bluetooth (Android & iOS), USB (Android), Network/TCP (Android)
-- Print types: text, images (base64), QR codes, cash drawer kick, auto-cut
-- Capacitor compatibility: 8.x+
+
+[![npm](https://img.shields.io/badge/npm-zprinter-CB3837?style=flat-square&logo=npm)](https://www.npmjs.com/package/zprinter)
+[![Capacitor](https://img.shields.io/badge/Capacitor-8.x%2B-119EFF?style=flat-square&logo=capacitor)](https://capacitorjs.com/)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green?style=flat-square)](https://github.com/zakirjarir/zprinter)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![Issues](https://img.shields.io/badge/Issues-GitHub-black?style=flat-square&logo=github)](https://github.com/zakirjarir/zprinter/issues)
+
+</div>
 
 ---
 
-Features
-- Scan and connect to Bluetooth printers (BLE/classic)
-- USB OTG support for Android
-- Network printing over raw TCP/IP (port 9100 common)
-- Image rendering optimized for thermal printers
-- ESC/POS QR code generation
-- Cash drawer kick and auto paper cut commands
+## 📋 Table of Contents
+
+- [✨ Quick Summary](#-quick-summary)
+- [🚀 Features](#-features)
+- [📦 Installation](#-installation)
+- [⚙️ Native Setup](#️-native-setup)
+- [💻 Usage Examples](#-usage-examples)
+- [📖 API Reference](#-api-reference)
+- [🧪 Example App & Local Dev](#-example-app--local-development)
+- [🏗️ Building & Publishing](#️-building--publishing)
+- [🔧 Troubleshooting & FAQ](#-troubleshooting--faq)
+- [🤝 Contributing & Support](#-contributing--support)
+- [📄 License](#-license)
 
 ---
 
-Installation
+## ✨ Quick Summary
 
-Preferred (install directly from GitHub repository — keeps package in sync with repo):
+| Feature | Details |
+|---|---|
+| **Connectivity** | Bluetooth (Android & iOS), USB (Android), Network/TCP (Android) |
+| **Print Types** | Text, Images (base64), QR Codes, Cash Drawer Kick, Auto-Cut |
+| **Capacitor** | Compatible with **8.x+** |
+
+---
+
+## 🚀 Features
+
+- 🔵 **Bluetooth** — Scan and connect to BLE/Classic thermal printers
+- 🔌 **USB OTG** — Full USB support for Android
+- 🌐 **Network** — Raw TCP/IP printing (default port 9100)
+- 🖼️ **Image Rendering** — Optimized base64 image output for thermal printers
+- 📱 **QR Codes** — Native ESC/POS QR code generation
+- ✂️ **Extras** — Cash drawer kick & auto paper cut commands
+
+---
+
+## 📦 Installation
+
+### ✅ Preferred — Install from GitHub (stays in sync with the repo)
 
 ```bash
 npm install zakirjarir/zprinter
 npx cap sync
 ```
 
-Alternative: install published npm package (if you prefer the npm registry):
 
+### 🛠️ Local Development
 ```bash
-npm install zprinter
-npx cap sync
-```
-
-Local development (work on the plugin and example-app together):
-
-```bash
-# from repo root
+# From the repo root
+git clone git@github.com:zakirjarir/zprinter.git
 npm install
-# go to example-app
+# Then go to the example app
 cd example-app
 npm install
 npm start
 ```
 
-Requirements & notes
-- Node 18+ recommended; npm 8+ or compatible
-- Capacitor 8+ (peer dependency)
-- For native verifies you need Xcode (macOS) and Android SDK + Gradle
+### 📋 Requirements
+
+| Requirement | Version |
+|---|---|
+| Node | 18+ recommended |
+| npm | 8+ or compatible |
+| Capacitor | 8+ (peer dependency) |
+| Xcode | Required for iOS native verification (macOS only) |
+| Android SDK + Gradle | Required for Android native verification |
 
 ---
 
-Native setup
+## ⚙️ Native Setup
 
-Android
-1) AndroidManifest.xml (app/src/main/AndroidManifest.xml):
+### 🤖 Android
+
+**1. Update `AndroidManifest.xml`** (`app/src/main/AndroidManifest.xml`):
 
 ```xml
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -84,125 +107,248 @@ Android
 <uses-feature android:name="android.hardware.usb.host" android:required="false" />
 ```
 
-2) Runtime permissions: request BLUETOOTH_SCAN/BLUETOOTH_CONNECT and ACCESS_FINE_LOCATION on Android 12+ before scanning/connecting.
-3) Ensure targetSdkVersion and compileSdkVersion align with Android permissions model (12+ adjustments).
+**2. Runtime Permissions:**
+Request `BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, and `ACCESS_FINE_LOCATION` on **Android 12+** before scanning or connecting.
 
-iOS
-1) Add usage descriptions to Info.plist:
+**3. SDK Versions:**
+Ensure `targetSdkVersion` and `compileSdkVersion` align with the Android 12+ permissions model.
+
+---
+
+### 🍎 iOS
+
+**1. Update `Info.plist`** with Bluetooth usage descriptions:
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
 <string>Required to discover and print to thermal printers.</string>
+
 <key>NSBluetoothPeripheralUsageDescription</key>
 <string>Required to discover and print to thermal printers.</string>
 ```
 
-2) If your app requires Bluetooth background modes, add the appropriate background modes and justify them in App Store submission.
+**2. Background Modes (Optional):**
+If your app requires Bluetooth background modes, add the appropriate modes and justify them in your App Store submission.
 
 ---
 
-Basic usage examples
+## 💻 Usage Examples
 
-Bluetooth (scan, connect, print text, disconnect):
+### 🔵 Bluetooth — Scan, Connect, Print, Disconnect
 
-```ts
+```typescript
 import { ZPrinter } from 'zprinter';
 
-// 1. Scan
+// 1️⃣ Scan for devices
 const { devices } = await ZPrinter.scanBluetoothDevices();
-// choose a device
-const addr = devices[0].address; // Android: MAC, iOS: UUID
+const addr = devices[0].address; // Android: MAC address | iOS: UUID
 
-// 2. Connect
+// 2️⃣ Connect
 await ZPrinter.connectBluetooth({ address: addr });
 
-// 3. Print text
-await ZPrinter.printBluetoothText({ text: 'Hello from ZPrinter\n', fontSize: 24, align: 'left', feedLines: 2 });
+// 3️⃣ Print text
+await ZPrinter.printBluetoothText({
+  text: 'Hello from ZPrinter\n',
+  fontSize: 24,
+  align: 'left',
+  feedLines: 2
+});
 
-// 4. Print image
-await ZPrinter.printBluetoothImage({ base64: 'data:image/png;base64,...', width: 384, align: 'center' });
+// 4️⃣ Print image (base64)
+await ZPrinter.printBluetoothImage({
+  base64: 'data:image/png;base64,...',
+  width: 384,
+  align: 'center'
+});
 
-// 5. Actions
+// 5️⃣ Actions
 await ZPrinter.cutBluetoothPaper();
 await ZPrinter.kickBluetoothDrawer();
 
-// 6. Disconnect
+// 6️⃣ Disconnect
 await ZPrinter.disconnectBluetooth();
 ```
 
-USB (Android only)
+---
 
-```ts
+### 🔌 USB — Android Only
+
+```typescript
 const { devices } = await ZPrinter.listUsbPrinters();
-await ZPrinter.connectUsbPrinter({ vendorId: devices[0].vendorId, productId: devices[0].productId });
+
+await ZPrinter.connectUsbPrinter({
+  vendorId: devices[0].vendorId,
+  productId: devices[0].productId
+});
+
 await ZPrinter.printUsbText({ text: 'USB Print\n' });
-await ZPrinter.disconnectBluetooth();
 ```
 
-Network/TCP (Android only)
+---
 
-```ts
-await ZPrinter.connectNetworkPrinter({ address: '192.168.1.100', port: 9100 });
+### 🌐 Network / TCP — Android Only
+
+```typescript
+await ZPrinter.connectNetworkPrinter({
+  address: '192.168.1.100',
+  port: 9100
+});
+
 await ZPrinter.printNetworkText({ text: 'Network print\n' });
-await ZPrinter.disconnectBluetooth();
 ```
 
-Image and QR guidance
-- Use monochrome images with white background; convert to 1-bit dithered PNG for best results.
-- For QR codes, use the plugin's QR API for optimal printer rendering.
+---
+
+### 🖼️ Image & QR Tips
+
+> 💡 **Image:** Use monochrome images with a white background. Convert to **1-bit dithered PNG** for best thermal printer results.
+>
+> 📱 **QR Code:** Use the plugin's built-in QR API for optimal ESC/POS rendering on thermal printers.
 
 ---
 
-API reference (short)
+## 📖 API Reference
 
-- scanBluetoothDevices(): Promise<{ devices: Device[] }>
-- connectBluetooth({ address: string }): Promise<void>
-- disconnectBluetooth(): Promise<void>
-- printBluetoothText(options: { text: string; fontSize?: number; align?: 'left'|'center'|'right'; isBold?: boolean; feedLines?: number })
-- printBluetoothImage(options: { base64: string; width?: number; align?: string })
-- printBluetoothQRCode(options: { data: string; size?: number; align?: string })
-- cutBluetoothPaper(): Promise<void>
-- kickBluetoothDrawer(): Promise<void>
-- listUsbPrinters(): Promise<{ devices: UsbDevice[] }> (Android)
-- connectUsbPrinter({ vendorId, productId }): Promise<void> (Android)
-- printUsbText(options): Promise<void> (Android)
-- connectNetworkPrinter({ address, port }): Promise<void> (Android)
-- printNetworkText(options): Promise<void> (Android)
+### Bluetooth
 
-See src/ for TypeScript types and full option fields.
+| Method | Description |
+|---|---|
+| `scanBluetoothDevices()` | Returns `{ devices: Device[] }` — discovered Bluetooth printers |
+| `connectBluetooth({ address })` | Connect to a printer by MAC (Android) or UUID (iOS) |
+| `disconnectBluetooth()` | Disconnect from the current Bluetooth printer |
+| `printBluetoothText(options)` | Print text with optional formatting |
+| `printBluetoothImage(options)` | Print a base64 image |
+| `printBluetoothQRCode(options)` | Print a QR code via ESC/POS |
+| `cutBluetoothPaper()` | Trigger auto paper cut |
+| `kickBluetoothDrawer()` | Send cash drawer kick command |
 
----
+#### `printBluetoothText` Options
 
-Example app & development
-- example-app demonstrates scanning, connecting and printing flows.
-- To run locally: cd example-app && npm install && npm start
-- To test native changes: npx cap sync && open platform project in Xcode or Android Studio.
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `text` | `string` | — | Text to print |
+| `fontSize` | `number` | — | Font size |
+| `align` | `'left' \| 'center' \| 'right'` | `'left'` | Text alignment |
+| `isBold` | `boolean` | `false` | Bold formatting |
+| `feedLines` | `number` | — | Lines to feed after text |
 
-Building & publishing
-- Build: npm run build (generates dist/)
-- Verify iOS: npm run verify:ios (requires Xcode)
-- Verify Android: npm run verify:android (requires Android SDK)
-- When publishing to npm or GitHub Packages, ensure build artifacts (dist/) are included.
+#### `printBluetoothImage` Options
 
-Troubleshooting & FAQ
-- Image prints black: convert to white-background, 1-bit monochrome.
-- No Bluetooth found: request runtime permissions on Android and enable Location services.
-- USB not detected: try a powered OTG cable; ensure Android manifest has usb.host feature and app has proper permissions.
-- Network connect fails: verify IP, port and network/subnet.
+| Option | Type | Description |
+|---|---|---|
+| `base64` | `string` | Base64-encoded image string |
+| `width` | `number` | Print width in pixels |
+| `align` | `string` | Image alignment |
 
-Migration notes
-- If upgrading from older Capacitor or Android SDK versions, check permission changes (Android 12+), and update manifest accordingly.
+#### `printBluetoothQRCode` Options
 
-Contributing
-- Fork -> branch -> PR. Run existing linters/tests locally. Open an issue for large changes.
-
-Support
-- Email: zakirjarir@gmail.com
-- Issues: https://github.com/zakirjarir/zprinter/issues
-
-License
-- MIT
+| Option | Type | Description |
+|---|---|---|
+| `data` | `string` | Data to encode in QR |
+| `size` | `number` | QR code size |
+| `align` | `string` | QR code alignment |
 
 ---
 
-(Install command corrected: prefer `npm install zakirjarir/zprinter` when you want the repository package.)
+### USB *(Android Only)*
+
+| Method | Description |
+|---|---|
+| `listUsbPrinters()` | Returns `{ devices: UsbDevice[] }` |
+| `connectUsbPrinter({ vendorId, productId })` | Connect to a USB printer |
+| `printUsbText(options)` | Print text over USB |
+
+---
+
+### Network *(Android Only)*
+
+| Method | Description |
+|---|---|
+| `connectNetworkPrinter({ address, port })` | Connect via TCP/IP |
+| `printNetworkText(options)` | Print text over network |
+
+> 📁 See `src/` for full TypeScript types and all available option fields.
+
+---
+
+## 🧪 Example App & Local Development
+
+The `example-app` directory demonstrates complete scanning, connecting, and printing flows.
+
+```bash
+# Run the example app locally
+cd example-app
+npm install
+npm start
+```
+
+**Testing native changes:**
+```bash
+npx cap sync
+# Then open the platform project in Xcode or Android Studio
+```
+
+---
+
+## 🏗️ Building & Publishing
+
+| Command | Description |
+|---|---|
+| `npm run build` | Compile the plugin — generates output in `dist/` |
+| `npm run verify:ios` | Verify iOS build *(requires Xcode on macOS)* |
+| `npm run verify:android` | Verify Android build *(requires Android SDK)* |
+
+> ⚠️ When publishing to npm or GitHub Packages, ensure build artifacts (`dist/`) are included in the package.
+
+---
+
+## 🔧 Troubleshooting & FAQ
+
+| Problem | Solution |
+|---|---|
+| 🖼️ **Image prints completely black** | Convert image to a white background, 1-bit monochrome format before printing |
+| 🔵 **No Bluetooth devices found** | Request runtime permissions on Android; ensure Location services are enabled |
+| 🔌 **USB printer not detected** | Try a powered OTG cable; verify `usb.host` feature is in the Android manifest and permissions are granted |
+| 🌐 **Network connection fails** | Double-check the IP address, port number, and that the device is on the same subnet |
+
+---
+
+### 🔀 Migration Notes
+
+If upgrading from an older Capacitor or Android SDK version:
+- Review permission changes introduced in **Android 12+**
+- Update `AndroidManifest.xml` accordingly (see Native Setup above)
+
+---
+
+## 🤝 Contributing & Support
+
+Contributions are welcome! Please follow this flow:
+
+> **Fork** → **Branch** → **Pull Request**
+
+- Run existing linters and tests locally before submitting
+- Open an issue first for large or breaking changes
+
+### 📬 Support
+
+| Channel | Link |
+|---|---|
+| 📧 Email | [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com) |
+| 🐛 Issues | [github.com/zakirjarir/zprinter/issues](https://github.com/zakirjarir/zprinter/issues) |
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+<div align="center">
+
+Made with ❤️ by [zakirjarir](https://github.com/zakirjarir)
+
+⭐ If this plugin helped you, please consider starring the repo!
+
+</div>
