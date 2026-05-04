@@ -13,7 +13,7 @@ Currently, we provide security updates for the following versions:
 
 We take the security of this project seriously. If you find a security vulnerability, please do **not** report it via a public issue.
 
-Instead, please email [INSERT EMAIL ADDRESS] with a description of the vulnerability and steps to reproduce it.
+Instead, please email [zakirjarir@gmail.com] with a description of the vulnerability and steps to reproduce it.
 
 ### What to Expect
 *   We will acknowledge your report within 48 hours.
