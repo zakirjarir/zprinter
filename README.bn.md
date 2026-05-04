@@ -277,6 +277,22 @@ await ZPrinter.printNetworkText({ text: 'নেটওয়ার্ক প্�
 
 ---
 
+### থার্মাল
+
+| মেথড | বিবরণ |
+|---|---|
+| `connectThermalPrinter(options?)` | থার্মাল প্রিন্টারে সংযোগ (USB/থার্মাল-নির্দিষ্ট অপশন) |
+| `printThermalText(options)` | `PrinterTextOptions` ব্যবহার করে টেক্সট প্রিন্ট (text, fontSize, align, isBold, feedLines) |
+| `printThermalImage(options)` | `PrinterImageOptions` ব্যবহার করে base64 ইমেজ প্রিন্ট (base64, width, height, align) |
+| `printThermalQRCode(options)` | `PrinterQRCodeOptions` ব্যবহার করে QR কোড প্রিন্ট (data, size, align) |
+| `kickThermalDrawer()` | ক্যাশ ড্রয়ার কিক কমান্ড পাঠান |
+| `disconnectThermalPrinter()` | থার্মাল প্রিন্টার থেকে সংযোগ বিচ্ছিন্ন করুন |
+
+উপরের অপশনগুলোর সম্পূর্ণ বিবরণ ও টাইপিংস দেখতে `src/definitions.ts` দেখুন। প্লাগইনটি ব্লুটুথ/USB/নেটওয়ার্ক API-র পাশাপাশি থার্মাল-নির্দিষ্ট মেথড প্রদান করে, যাতে রিসিট-স্টাইল প্রিন্টিং সহজ হয়।
+
+
+---
+
 ## 🧪 উদাহরণ অ্যাপ ও লোকাল ডেভেলপমেন্ট
 
 `zprinter` ডিরেক্টরিতে সম্পূর্ণ স্ক্যানিং, সংযোগ ও প্রিন্টিং ফ্লো দেখানো হয়েছে।

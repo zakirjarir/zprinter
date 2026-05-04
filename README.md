@@ -275,6 +275,22 @@ await ZPrinter.printNetworkText({ text: 'Network print\n' });
 
 ---
 
+### Thermal
+
+| Method | Description |
+|---|---|
+| `connectThermalPrinter(options?)` | Connect to a thermal printer (USB/thermal-specific connect options) |
+| `printThermalText(options)` | Print text using PrinterTextOptions (text, fontSize, align, isBold, feedLines) |
+| `printThermalImage(options)` | Print a base64 image using PrinterImageOptions (base64, width, height, align) |
+| `printThermalQRCode(options)` | Print a QR code using PrinterQRCodeOptions (data, size, align) |
+| `kickThermalDrawer()` | Send a cash-drawer kick command |
+| `disconnectThermalPrinter()` | Disconnect from the thermal printer |
+
+Use the same option shapes shown above (see `src/definitions.ts`) for typings and full details. This plugin exposes thermal-specific methods alongside Bluetooth/USB/Network APIs to simplify receipt-style printing workflows.
+
+
+---
+
 ## 🧪 Example App & Local Development
 
 The `zprinter` directory demonstrates complete scanning, connecting, and printing flows.
