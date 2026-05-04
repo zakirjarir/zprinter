@@ -1,40 +1,20 @@
 # 🖨️ zprinter v3.0.0
 
-### Created & Developed by **Zakir Jarir**
+### Developed by **Zakir Jarir**
+**High-Performance Thermal Printing Plugin for Capacitor (iOS & Android)**
 
 [![NPM Version](https://img.shields.io/npm/v/zprinter.svg)](https://www.npmjs.com/package/zprinter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Capacitor](https://img.shields.io/badge/Capacitor-8.0+-blue.svg)](https://capacitorjs.com/)
 [![Support](https://img.shields.io/badge/Support-Gmail%20%7C%20LinkedIn-orange.svg)](#📬-support--contact)
-[![Android Support](https://img.shields.io/badge/Android-BT%20%7C%20USB%20%7C%20Network-green.svg)](#android)
-[![iOS Support](https://img.shields.io/badge/iOS-Bluetooth-lightgrey.svg)](#ios)
 
-`zprinter` is a high-performance, enterprise-grade Capacitor plugin designed for thermal receipt printing. It provides a unified, cross-platform API to communicate with **Bluetooth**, **USB**, and **Network (TCP/IP)** printers using industry-standard ESC/POS commands.
+`zprinter` is a powerful native plugin that enables your Ionic/Capacitor apps to communicate with thermal printers. Whether you are using **Bluetooth**, **USB**, or **Network (WiFi/LAN)**, this plugin provides a rock-solid foundation for POS, Billing, and Logistics applications.
 
 ---
 
-## 🌟 Premium Features
+## 🚀 1. Installation
 
-*   ✅ **Universal Connectivity:** One plugin for Bluetooth, USB OTG (Android), and LAN/Network printers.
-*   🖼️ **High-Fidelity Image Printing:** Advanced grayscale algorithm to print logos and images clearly on thermal paper.
-*   🔳 **Native QR Codes:** High-speed, native generation of QR codes for payments and tracking.
-*   💵 **Point of Sale Ready:** Support for cash drawer kick-out (DK port) and automatic paper cutting.
-*   🎨 **Rich Text Formatting:** Easily control font sizes, bold styles, and text alignment (Left, Center, Right).
-*   🚀 **Performance Optimized:** Asynchronous, non-blocking API for smooth UI performance.
-
----
-
-## 📬 Support & Contact
-
-Need custom development, integration support, or found a bug?
-
-*   📧 **Gmail:** [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com)
-*   🔗 **LinkedIn:** [Zakir Jarir](https://www.linkedin.com/in/zakirjarir/)
-*   🌐 **GitHub:** [@zakirjarir](https://github.com/zakirjarir)
-
----
-
-## 📦 Installation
+Install the plugin via NPM and sync your project:
 
 ```bash
 npm install zakirjarir/zprinter
@@ -43,607 +23,222 @@ npx cap sync
 
 ---
 
-## 🔧 Native Configuration
+## 🔧 2. Native Setup
 
-### Android Setup
-Add the following permissions to your `AndroidManifest.xml` (Capacitor usually handles this, but verify for best results):
+### Android
+Add these permissions to `android/app/src/main/AndroidManifest.xml`:
 ```xml
-<!-- Bluetooth & Location -->
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-<!-- Network & USB Features -->
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-feature android:name="android.hardware.usb.host" />
 ```
 
-### iOS Setup
-Add the following keys to your `Info.plist` to request Bluetooth access:
+### iOS
+Add these keys to `ios/App/App/Info.plist`:
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
-<string>This app requires Bluetooth access to discover and connect to your receipt printer.</string>
+<string>This app uses Bluetooth to discover and print to receipt printers.</string>
 <key>NSBluetoothPeripheralUsageDescription</key>
-<string>This app requires Bluetooth access to discover and connect to your receipt printer.</string>
+<string>This app uses Bluetooth to discover and print to receipt printers.</string>
 ```
 
 ---
 
-## 🚀 Advanced Usage Examples
+## 📚 3. Comprehensive Function Reference
 
-### 💎 Professional Receipt (Combined Features)
+### 🔵 Bluetooth Printing Functions
+
+#### `scanBluetoothDevices()`
+Scans for nearby Bluetooth printers.
+```typescript
+const { devices } = await ZPrinter.scanBluetoothDevices();
+// Returns: { name: string, address: string, isPaired: boolean }[]
+```
+
+#### `connectBluetooth(options)`
+Connects to a printer using its MAC address.
+```typescript
+await ZPrinter.connectBluetooth({ address: '00:11:22:33:44:55' });
+```
+
+#### `printBluetoothText(options)`
+Prints formatted text.
+```typescript
+await ZPrinter.printBluetoothText({
+  text: 'Hello World\n',
+  fontSize: 24,         // Default: 24
+  align: 'center',      // 'left' | 'center' | 'right'
+  isBold: true,         // Default: false
+  feedLines: 2          // Lines to feed after printing
+});
+```
+
+#### `printBluetoothImage(options)`
+Prints a Base64 image.
+```typescript
+await ZPrinter.printBluetoothImage({
+  base64: 'data:image/png;base64,iVBOR...',
+  width: 200,           // Desired width in pixels
+  align: 'center'
+});
+```
+
+#### `printBluetoothQRCode(options)`
+Prints a native ESC/POS QR code.
+```typescript
+await ZPrinter.printBluetoothQRCode({
+  data: 'https://zakirjarir.com',
+  size: 8,              // Size 1-16
+  align: 'center'
+});
+```
+
+#### `kickBluetoothDrawer()`
+Opens the cash drawer connected to the Bluetooth printer.
+```typescript
+await ZPrinter.kickBluetoothDrawer();
+```
+
+#### `cutBluetoothPaper()`
+Cuts the paper (requires a printer with an auto-cutter).
+```typescript
+await ZPrinter.cutBluetoothPaper();
+```
+
+---
+
+### 🔌 USB Printing Functions (Android Only)
+
+#### `listUsbPrinters()`
+Lists all USB devices connected via OTG.
+```typescript
+const { devices } = await ZPrinter.listUsbPrinters();
+```
+
+#### `connectUsbPrinter(options)`
+Connects to a specific USB printer.
+```typescript
+await ZPrinter.connectUsbPrinter({
+  vendorId: 1234,
+  productId: 5678,
+  deviceName: 'usb_printer'
+});
+```
+
+#### `printUsbText(options)`
+Same options as Bluetooth text printing.
+```typescript
+await ZPrinter.printUsbText({ text: 'USB Print Test\n' });
+```
+
+---
+
+### 🌐 Network (WiFi/LAN) Printing (Android Only)
+
+#### `connectNetworkPrinter(options)`
+Connects to a printer via IP and Port.
+```typescript
+await ZPrinter.connectNetworkPrinter({
+  address: '192.168.1.100',
+  port: 9100            // Default: 9100
+});
+```
+
+#### `printNetworkText(options)`
+```typescript
+await ZPrinter.printNetworkText({ text: 'WiFi Print Successful\n' });
+```
+
+#### `printNetworkQRCode(options)`
+```typescript
+await ZPrinter.printNetworkQRCode({ data: 'WiFi-QR', size: 10 });
+```
+
+---
+
+## 💎 4. Full Professional Demo Code
+
 ```typescript
 import { ZPrinter } from 'zprinter';
 
-async function printInvoice() {
+const printMyReceipt = async () => {
   try {
-    // 1. Connect to a Bluetooth Printer
-    await ZPrinter.connectBluetooth({ address: '00:11:22:33:44:55' });
+    // 1. Connect
+    await ZPrinter.connectBluetooth({ address: 'YOUR_MAC_ADDRESS' });
 
-    // 2. Print Store Logo
+    // 2. Logo
     await ZPrinter.printBluetoothImage({
-      base64: 'YOUR_BASE64_IMAGE_DATA',
-      width: 180,
+      base64: 'BASE64_STRING',
+      width: 150,
       align: 'center'
     });
 
-    // 3. Print Header
+    // 3. Header
     await ZPrinter.printBluetoothText({
-      text: 'Z-TECH SOLUTIONS\nDhaka, Bangladesh\n----------------',
-      fontSize: 24,
-      align: 'center',
-      isBold: true
+      text: 'Z-PRINTER POS SYSTEM\n',
+      fontSize: 32,
+      isBold: true,
+      align: 'center'
     });
 
-    // 4. Print Table Content
+    // 4. Details
     await ZPrinter.printBluetoothText({
-      text: 'Item            Qty     Price\nItem A           01     $10.00\nItem B           02     $20.00\n-----------------------------',
+      text: 'Date: 2024-05-04\nItem 1: $10.00\nItem 2: $20.00\nTotal: $30.00\n',
       align: 'left'
     });
 
-    // 5. Print Payment QR Code
+    // 5. QR Code
     await ZPrinter.printBluetoothQRCode({
-      data: 'https://payment.example.com/inv123',
-      size: 8,
-      align: 'center'
+      data: 'https://github.com/zakirjarir/zprinter',
+      size: 8
     });
 
-    // 6. Paper Cut & Open Drawer
+    // 6. Finish
     await ZPrinter.cutBluetoothPaper();
     await ZPrinter.kickBluetoothDrawer();
-    
     await ZPrinter.disconnectBluetooth();
-  } catch (error) {
-    console.error('Print Error:', error);
+
+    alert('Print Successful!');
+  } catch (err) {
+    alert('Print Failed: ' + err);
   }
-}
-```
-
-### 🌐 WiFi/Network Printing (Android)
-```typescript
-// Connect to a printer in the kitchen or remote area
-await ZPrinter.connectNetworkPrinter({
-  address: '192.168.1.100',
-  port: 9100
-});
-
-await ZPrinter.printNetworkText({ 
-  text: 'NEW ORDER RECEIVED\nTable: 05',
-  fontSize: 32,
-  isBold: true 
-});
-
-await ZPrinter.disconnectNetworkPrinter();
+};
 ```
 
 ---
 
-## 🛠️ API Reference
-
-The following API is generated from the source code.
-
-<docgen-index>
-
-* [`scanBluetoothDevices()`](#scanbluetoothdevices)
-* [`connectBluetooth(...)`](#connectbluetooth)
-* [`printBluetoothText(...)`](#printbluetoothtext)
-* [`printBluetoothImage(...)`](#printbluetoothimage)
-* [`printBluetoothQRCode(...)`](#printbluetoothqrcode)
-* [`kickBluetoothDrawer()`](#kickbluetoothdrawer)
-* [`cutBluetoothPaper()`](#cutbluetoothpaper)
-* [`disconnectBluetooth()`](#disconnectbluetooth)
-* [`listUsbPrinters()`](#listusbprinters)
-* [`connectUsbPrinter(...)`](#connectusbprinter)
-* [`printUsbText(...)`](#printusbtext)
-* [`printUsbImage(...)`](#printusbimage)
-* [`printUsbQRCode(...)`](#printusbqrcode)
-* [`kickUsbDrawer()`](#kickusbdrawer)
-* [`disconnectUsbPrinter()`](#disconnectusbprinter)
-* [`connectThermalPrinter(...)`](#connectthermalprinter)
-* [`printThermalText(...)`](#printthermaltext)
-* [`printThermalImage(...)`](#printthermalimage)
-* [`printThermalQRCode(...)`](#printthermalqrcode)
-* [`kickThermalDrawer()`](#kickthermaldrawer)
-* [`disconnectThermalPrinter()`](#disconnectthermalprinter)
-* [`connectNetworkPrinter(...)`](#connectnetworkprinter)
-* [`printNetworkText(...)`](#printnetworktext)
-* [`printNetworkImage(...)`](#printnetworkimage)
-* [`printNetworkQRCode(...)`](#printnetworkqrcode)
-* [`kickNetworkDrawer()`](#kicknetworkdrawer)
-* [`disconnectNetworkPrinter()`](#disconnectnetworkprinter)
-* [Interfaces](#interfaces)
-
-</docgen-index>
-
-<docgen-api>
-<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### scanBluetoothDevices()
-
-```typescript
-scanBluetoothDevices() => Promise<{ devices: BluetoothPrinterDevice[]; count: number; }>
-```
-
-**Returns:** <code>Promise&lt;{ devices: BluetoothPrinterDevice[]; count: number; }&gt;</code>
-
---------------------
-
-
-### connectBluetooth(...)
-
-```typescript
-connectBluetooth(options: { address: string; }) => Promise<PrinterConnectionResult>
-```
-
-| Param         | Type                              |
-| ------------- | --------------------------------- |
-| **`options`** | <code>{ address: string; }</code> |
-
-**Returns:** <code>Promise&lt;<a href="#printerconnectionresult">PrinterConnectionResult</a>&gt;</code>
-
---------------------
-
-
-### printBluetoothText(...)
-
-```typescript
-printBluetoothText(options: PrinterTextOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#printertextoptions">PrinterTextOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printBluetoothImage(...)
-
-```typescript
-printBluetoothImage(options: PrinterImageOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerimageoptions">PrinterImageOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printBluetoothQRCode(...)
-
-```typescript
-printBluetoothQRCode(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerqrcodeoptions">PrinterQRCodeOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### kickBluetoothDrawer()
-
-```typescript
-kickBluetoothDrawer() => Promise<{ kicked: boolean; }>
-```
-
-**Returns:** <code>Promise&lt;{ kicked: boolean; }&gt;</code>
-
---------------------
-
-
-### cutBluetoothPaper()
-
-```typescript
-cutBluetoothPaper() => Promise<{ cut: boolean; }>
-```
-
-**Returns:** <code>Promise&lt;{ cut: boolean; }&gt;</code>
-
---------------------
-
-
-### disconnectBluetooth()
-
-```typescript
-disconnectBluetooth() => Promise<void>
-```
-
---------------------
-
-
-### listUsbPrinters()
-
-```typescript
-listUsbPrinters() => Promise<{ devices: UsbPrinterDevice[]; count: number; }>
-```
-
-**Returns:** <code>Promise&lt;{ devices: UsbPrinterDevice[]; count: number; }&gt;</code>
-
---------------------
-
-
-### connectUsbPrinter(...)
-
-```typescript
-connectUsbPrinter(options?: UsbPrinterConnectOptions | undefined) => Promise<PrinterConnectionResult>
-```
-
-| Param         | Type                                                                          |
-| ------------- | ----------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#usbprinterconnectoptions">UsbPrinterConnectOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#printerconnectionresult">PrinterConnectionResult</a>&gt;</code>
-
---------------------
-
-
-### printUsbText(...)
-
-```typescript
-printUsbText(options: PrinterTextOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#printertextoptions">PrinterTextOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printUsbImage(...)
-
-```typescript
-printUsbImage(options: PrinterImageOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerimageoptions">PrinterImageOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printUsbQRCode(...)
-
-```typescript
-printUsbQRCode(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerqrcodeoptions">PrinterQRCodeOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### kickUsbDrawer()
-
-```typescript
-kickUsbDrawer() => Promise<{ kicked: boolean; }>
-```
-
-**Returns:** <code>Promise&lt;{ kicked: boolean; }&gt;</code>
-
---------------------
-
-
-### disconnectUsbPrinter()
-
-```typescript
-disconnectUsbPrinter() => Promise<void>
-```
-
---------------------
-
-
-### connectThermalPrinter(...)
-
-```typescript
-connectThermalPrinter(options?: UsbPrinterConnectOptions | undefined) => Promise<PrinterConnectionResult>
-```
-
-| Param         | Type                                                                          |
-| ------------- | ----------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#usbprinterconnectoptions">UsbPrinterConnectOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#printerconnectionresult">PrinterConnectionResult</a>&gt;</code>
-
---------------------
-
-
-### printThermalText(...)
-
-```typescript
-printThermalText(options: PrinterTextOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#printertextoptions">PrinterTextOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printThermalImage(...)
-
-```typescript
-printThermalImage(options: PrinterImageOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerimageoptions">PrinterImageOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printThermalQRCode(...)
-
-```typescript
-printThermalQRCode(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerqrcodeoptions">PrinterQRCodeOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### kickThermalDrawer()
-
-```typescript
-kickThermalDrawer() => Promise<{ kicked: boolean; }>
-```
-
-**Returns:** <code>Promise&lt;{ kicked: boolean; }&gt;</code>
-
---------------------
-
-
-### disconnectThermalPrinter()
-
-```typescript
-disconnectThermalPrinter() => Promise<void>
-```
-
---------------------
-
-
-### connectNetworkPrinter(...)
-
-```typescript
-connectNetworkPrinter(options: NetworkPrinterConnectOptions) => Promise<PrinterConnectionResult>
-```
-
-| Param         | Type                                                                                  |
-| ------------- | ------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#networkprinterconnectoptions">NetworkPrinterConnectOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#printerconnectionresult">PrinterConnectionResult</a>&gt;</code>
-
---------------------
-
-
-### printNetworkText(...)
-
-```typescript
-printNetworkText(options: PrinterTextOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#printertextoptions">PrinterTextOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printNetworkImage(...)
-
-```typescript
-printNetworkImage(options: PrinterImageOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerimageoptions">PrinterImageOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### printNetworkQRCode(...)
-
-```typescript
-printNetworkQRCode(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>
-```
-
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#printerqrcodeoptions">PrinterQRCodeOptions</a></code> |
-
-**Returns:** <code>Promise&lt;{ printed: boolean; }&gt;</code>
-
---------------------
-
-
-### kickNetworkDrawer()
-
-```typescript
-kickNetworkDrawer() => Promise<{ kicked: boolean; }>
-```
-
-**Returns:** <code>Promise&lt;{ kicked: boolean; }&gt;</code>
-
---------------------
-
-
-### disconnectNetworkPrinter()
-
-```typescript
-disconnectNetworkPrinter() => Promise<void>
-```
-
---------------------
-
-
-### Interfaces
-
-
-#### BluetoothPrinterDevice
-
-| Prop           | Type                 |
-| -------------- | -------------------- |
-| **`name`**     | <code>string</code>  |
-| **`address`**  | <code>string</code>  |
-| **`isPaired`** | <code>boolean</code> |
-
-
-#### PrinterConnectionResult
-
-| Prop                | Type                 |
-| ------------------- | -------------------- |
-| **`connected`**     | <code>boolean</code> |
-| **`deviceName`**    | <code>string</code>  |
-| **`deviceAddress`** | <code>string</code>  |
-| **`vendorId`**      | <code>number</code>  |
-| **`productId`**     | <code>number</code>  |
-
-
-#### PrinterTextOptions
-
-| Prop            | Type                                       |
-| --------------- | ------------------------------------------ |
-| **`text`**      | <code>string</code>                        |
-| **`fontSize`**  | <code>number</code>                        |
-| **`align`**     | <code>'left' \| 'center' \| 'right'</code> |
-| **`isBold`**    | <code>boolean</code>                       |
-| **`feedLines`** | <code>number</code>                        |
-
-
-#### PrinterImageOptions
-
-| Prop         | Type                                       |
-| ------------ | ------------------------------------------ |
-| **`base64`** | <code>string</code>                        |
-| **`width`**  | <code>number</code>                        |
-| **`height`** | <code>number</code>                        |
-| **`align`**  | <code>'left' \| 'center' \| 'right'</code> |
-
-
-#### PrinterQRCodeOptions
-
-| Prop        | Type                                       |
-| ----------- | ------------------------------------------ |
-| **`data`**  | <code>string</code>                        |
-| **`size`**  | <code>number</code>                        |
-| **`align`** | <code>'left' \| 'center' \| 'right'</code> |
-
-
-#### UsbPrinterDevice
-
-| Prop                   | Type                |
-| ---------------------- | ------------------- |
-| **`deviceName`**       | <code>string</code> |
-| **`vendorId`**         | <code>number</code> |
-| **`productId`**        | <code>number</code> |
-| **`manufacturerName`** | <code>string</code> |
-| **`productName`**      | <code>string</code> |
-| **`deviceClass`**      | <code>number</code> |
-
-
-#### UsbPrinterConnectOptions
-
-| Prop             | Type                |
-| ---------------- | ------------------- |
-| **`vendorId`**   | <code>number</code> |
-| **`productId`**  | <code>number</code> |
-| **`deviceName`** | <code>string</code> |
-
-
-#### NetworkPrinterConnectOptions
-
-| Prop          | Type                |
-| ------------- | ------------------- |
-| **`address`** | <code>string</code> |
-| **`port`**    | <code>number</code> |
-
-</docgen-api>
+## ❓ 5. FAQ & Troubleshooting
+
+*   **Q: My image is solid black.**
+    *   A: Ensure your image has a white background. Transparent backgrounds are often treated as black by thermal heads.
+*   **Q: Bluetooth scan finds nothing.**
+    *   A: Ensure Location is ON and permissions are granted on Android.
+*   **Q: Printer prints gibberish.**
+    *   A: This happens if the printer is not ESC/POS compatible or uses a different baud rate (for serial-over-USB).
 
 ---
 
-## ❓ FAQ & Troubleshooting
+## 📬 Support & Contact
 
-#### ⚡ Image quality is poor
-Thermal printers use 1-bit dithering. For best results, use high-contrast images with white backgrounds. Transparent backgrounds may print as solid black.
+Need help or enterprise support? Contact me:
 
-#### 📶 Bluetooth device not found
-- **Android:** Ensure "Location Services" are enabled.
-- **iOS:** Ensure the printer is not already paired in the iOS System Settings.
-
-#### 🔌 USB OTG Issues
-Ensure your Android device supports USB Host mode and you are using a high-quality OTG adapter.
-
-#### 📏 Paper Width
-- **58mm printers:** Recommended max 32 characters per line.
-- **80mm printers:** Recommended max 48 characters per line.
+*   📧 **Email:** [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com)
+*   🔗 **LinkedIn:** [Zakir Jarir](https://www.linkedin.com/in/zakirjarir/)
+*   🌐 **Portfolio:** [zakirjarir.com](https://zakirjarir.com)
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions to improve this plugin! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+We welcome contributions! Please fork the repo and submit a PR.
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the **MIT License**.
 
 ---
-### 💖 Created & Maintained by **Zakir Jarir**
-*Built with passion for the Capacitor community.*
+*Developed with ❤️ by **Zakir Jarir***
