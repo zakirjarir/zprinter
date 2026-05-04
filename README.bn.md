@@ -301,7 +301,6 @@ await ZPrinter.printNetworkText({ text: 'নেটওয়ার্ক প্�
 # উদাহরণ অ্যাপ লোকালি চালান
 cd zprinter
 npm install
-npm start
 ```
 
 **নেটিভ পরিবর্তন পরীক্ষা করতে:**

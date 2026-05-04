@@ -299,7 +299,6 @@ The `zprinter` directory demonstrates complete scanning, connecting, and printin
 # Run the example app locally
 cd zprinter
 npm install
-npm start
 ```
 
 **Testing native changes:**
