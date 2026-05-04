@@ -8,7 +8,7 @@
 
 <p align="center">
 
-[![বাংলা](https://img.shields.io/badge/%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE-%E0%A6%AA%E0%A6%A5%E0%A6%A8-orange?style=for-the-badge)](https://github.com/zakirjarir/zprinter/blob/main/README.bn.md) &nbsp; [![English](https://img.shields.io/badge/English-Read-blue?style=for-the-badge&logo=github)](https://github.com/zakirjarir/zprinter/blob/main/README.md)
+[![English](https://img.shields.io/badge/English-Read-blue?style=for-the-badge&logo=github)](https://github.com/zakirjarir/zprinter/blob/main/README.md)
 
 </p>
 
@@ -127,10 +127,10 @@ npm start
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
-<string>থার্মাল প্রিন্টার খুঁজে পেতে এবং প্রিন্ট করতে প্রয়োজন।</string>
+<string>Required to discover and print to thermal printers.</string>
 
 <key>NSBluetoothPeripheralUsageDescription</key>
-<string>থার্মাল প্রিন্টার খুঁজে পেতে এবং প্রিন্ট করতে প্রয়োজন।</string>
+<string>Required to discover and print to thermal printers.</string>
 ```
 
 **২. ব্যাকগ্রাউন্ড মোড (ঐচ্ছিক):**

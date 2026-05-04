@@ -9,7 +9,7 @@
 <br/>
 <p align="center">
 
-[![English](https://img.shields.io/badge/English-You%27re%20Here-brightgreen?style=for-the-badge&logo=github)](https://github.com/zakirjarir/zprinter/blob/main/README.md) &nbsp; [![বাংলা](https://img.shields.io/badge/%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE-%E0%A6%AA%E0%A6%A5%E0%A6%A8-orange?style=for-the-badge)](https://github.com/zakirjarir/zprinter/blob/main/README.bn.md)
+[![বাংলা](https://img.shields.io/badge/%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE-%E0%A6%AA%E0%A6%A5%E0%A6%A8-orange?style=for-the-badge)](https://github.com/zakirjarir/zprinter/blob/main/README.bn.md)
 
 </p>
 <br/>
