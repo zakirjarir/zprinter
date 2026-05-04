@@ -12,12 +12,25 @@
 
 ---
 
+## ✨ Key Features
+
+- ✅ **Bluetooth Support**: Scan and connect to BLE/Classic Bluetooth printers (iOS & Android).
+- ✅ **USB Support**: Connect via OTG to thermal printers (Android Only).
+- ✅ **Network Support**: Print over TCP/IP (WiFi/LAN) with custom ports (Android Only).
+- ✅ **Image Rendering**: High-quality monochrome image printing from Base64.
+- ✅ **QR Code Support**: Native ESC/POS QR code generation.
+- ✅ **Cash Drawer**: Trigger cash drawer kicks (`kickDrawer`).
+- ✅ **Auto-Cutter**: Command for automatic paper cutting.
+- ✅ **Performance**: Optimized for fast printing with minimal latency.
+
+---
+
 ## 🚀 1. Installation
 
 Install the plugin via NPM and sync your project:
 
 ```bash
-npm install zakirjarir/zprinter
+npm install zprinter
 npx cap sync
 ```
 
@@ -28,11 +41,14 @@ npx cap sync
 ### Android
 Add these permissions to `android/app/src/main/AndroidManifest.xml`:
 ```xml
+<!-- Bluetooth Permissions -->
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<!-- Network & USB Permissions -->
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-feature android:name="android.hardware.usb.host" />
 ```
@@ -48,177 +64,170 @@ Add these keys to `ios/App/App/Info.plist`:
 
 ---
 
-## 📚 3. Comprehensive Function Reference
+## 📚 3. API Reference & Platform Support
 
-### 🔵 Bluetooth Printing Functions
+| Method | Android | iOS | Description |
+| :--- | :---: | :---: | :--- |
+| `scanBluetoothDevices()` | ✅ | ✅ | Scans for nearby Bluetooth devices. |
+| `connectBluetooth()` | ✅ | ✅ | Connects to a Bluetooth printer. |
+| `printBluetoothText()` | ✅ | ✅ | Prints text via Bluetooth. |
+| `printBluetoothImage()` | ✅ | ✅ | Prints image via Bluetooth. |
+| `printBluetoothQRCode()` | ✅ | ✅ | Prints QR code via Bluetooth. |
+| `kickBluetoothDrawer()` | ✅ | ✅ | Kicks cash drawer via Bluetooth. |
+| `cutBluetoothPaper()` | ✅ | ✅ | Cuts paper via Bluetooth. |
+| `disconnectBluetooth()` | ✅ | ✅ | Disconnects Bluetooth printer. |
+| `listUsbPrinters()` | ✅ | ❌ | Lists available USB printers. |
+| `connectUsbPrinter()` | ✅ | ❌ | Connects to a USB printer. |
+| `printUsbText()` | ✅ | ❌ | Prints text via USB. |
+| `connectNetworkPrinter()` | ✅ | ❌ | Connects to a Network printer. |
+| `printNetworkText()` | ✅ | ❌ | Prints text via Network. |
 
-#### `scanBluetoothDevices()`
-Scans for nearby Bluetooth printers.
+---
+
+## 🔵 4. Bluetooth Printing Guide
+
+### Step 1: Scan for Devices
 ```typescript
+import { ZPrinter } from 'zprinter';
+
 const { devices } = await ZPrinter.scanBluetoothDevices();
-// Returns: { name: string, address: string, isPaired: boolean }[]
+// On iOS, use device.address (UUID) for connection.
+// On Android, use device.address (MAC Address).
 ```
 
-#### `connectBluetooth(options)`
-Connects to a printer using its MAC address.
+### Step 2: Connect
 ```typescript
 await ZPrinter.connectBluetooth({ address: '00:11:22:33:44:55' });
 ```
 
-#### `printBluetoothText(options)`
-Prints formatted text.
+### Step 3: Print Text
 ```typescript
 await ZPrinter.printBluetoothText({
-  text: 'Hello World\n',
-  fontSize: 24,         // Default: 24
-  align: 'center',      // 'left' | 'center' | 'right'
-  isBold: true,         // Default: false
-  feedLines: 2          // Lines to feed after printing
+  text: 'Z-PRINTER POS\n',
+  fontSize: 32,
+  align: 'center',
+  isBold: true,
+  feedLines: 2
 });
-```
-
-#### `printBluetoothImage(options)`
-Prints a Base64 image.
-```typescript
-await ZPrinter.printBluetoothImage({
-  base64: 'data:image/png;base64,iVBOR...',
-  width: 200,           // Desired width in pixels
-  align: 'center'
-});
-```
-
-#### `printBluetoothQRCode(options)`
-Prints a native ESC/POS QR code.
-```typescript
-await ZPrinter.printBluetoothQRCode({
-  data: 'https://zakirjarir.com',
-  size: 8,              // Size 1-16
-  align: 'center'
-});
-```
-
-#### `kickBluetoothDrawer()`
-Opens the cash drawer connected to the Bluetooth printer.
-```typescript
-await ZPrinter.kickBluetoothDrawer();
-```
-
-#### `cutBluetoothPaper()`
-Cuts the paper (requires a printer with an auto-cutter).
-```typescript
-await ZPrinter.cutBluetoothPaper();
 ```
 
 ---
 
-### 🔌 USB Printing Functions (Android Only)
+## 🔌 5. USB Printing (Android Only)
 
-#### `listUsbPrinters()`
-Lists all USB devices connected via OTG.
+Connect your printer via OTG cable.
+
 ```typescript
+// 1. List printers
 const { devices } = await ZPrinter.listUsbPrinters();
-```
 
-#### `connectUsbPrinter(options)`
-Connects to a specific USB printer.
-```typescript
+// 2. Connect (using vendorId/productId or deviceName)
 await ZPrinter.connectUsbPrinter({
-  vendorId: 1234,
-  productId: 5678,
-  deviceName: 'usb_printer'
+  vendorId: devices[0].vendorId,
+  productId: devices[0].productId
 });
-```
 
-#### `printUsbText(options)`
-Same options as Bluetooth text printing.
-```typescript
-await ZPrinter.printUsbText({ text: 'USB Print Test\n' });
+// 3. Print
+await ZPrinter.printUsbText({ text: 'USB Print Success!\n' });
 ```
 
 ---
 
-### 🌐 Network (WiFi/LAN) Printing (Android Only)
+## 🌐 6. Network Printing (Android Only)
 
-#### `connectNetworkPrinter(options)`
-Connects to a printer via IP and Port.
+Print over WiFi or LAN using the printer's IP address.
+
 ```typescript
 await ZPrinter.connectNetworkPrinter({
   address: '192.168.1.100',
-  port: 9100            // Default: 9100
+  port: 9100
 });
-```
 
-#### `printNetworkText(options)`
-```typescript
-await ZPrinter.printNetworkText({ text: 'WiFi Print Successful\n' });
-```
-
-#### `printNetworkQRCode(options)`
-```typescript
-await ZPrinter.printNetworkQRCode({ data: 'WiFi-QR', size: 10 });
+await ZPrinter.printNetworkText({ text: 'Network Print Success!\n' });
 ```
 
 ---
 
-## 💎 4. Full Professional Demo Code
+## 🖼️ 7. Advanced Printing
+
+### Image Printing
+For best results, use monochrome images with a **white background**.
+
+```typescript
+await ZPrinter.printBluetoothImage({
+  base64: 'data:image/png;base64,...',
+  width: 384, // Standard 58mm printer width
+  align: 'center'
+});
+```
+
+### QR Code Printing
+```typescript
+await ZPrinter.printBluetoothQRCode({
+  data: 'https://zakirjarir.com',
+  size: 8,
+  align: 'center'
+});
+```
+
+---
+
+## 💎 8. Full Implementation Example
 
 ```typescript
 import { ZPrinter } from 'zprinter';
 
-const printMyReceipt = async () => {
+const handlePrint = async () => {
   try {
-    // 1. Connect
-    await ZPrinter.connectBluetooth({ address: 'YOUR_MAC_ADDRESS' });
+    // 1. Connection
+    await ZPrinter.connectBluetooth({ address: 'YOUR_DEVICE_ADDRESS' });
 
-    // 2. Logo
+    // 2. Branding
     await ZPrinter.printBluetoothImage({
-      base64: 'BASE64_STRING',
-      width: 150,
+      base64: 'LOGO_BASE64',
+      width: 200,
       align: 'center'
     });
 
-    // 3. Header
+    // 3. Content
     await ZPrinter.printBluetoothText({
-      text: 'Z-PRINTER POS SYSTEM\n',
+      text: 'OFFICIAL RECEIPT\n',
       fontSize: 32,
       isBold: true,
       align: 'center'
     });
 
-    // 4. Details
     await ZPrinter.printBluetoothText({
-      text: 'Date: 2024-05-04\nItem 1: $10.00\nItem 2: $20.00\nTotal: $30.00\n',
+      text: 'Item: Coffee......$5.00\nTotal: $5.00\n',
       align: 'left'
     });
 
-    // 5. QR Code
-    await ZPrinter.printBluetoothQRCode({
-      data: 'https://github.com/zakirjarir/zprinter',
-      size: 8
-    });
-
-    // 6. Finish
+    // 4. Footer & Actions
+    await ZPrinter.printBluetoothQRCode({ data: 'https://zakirjarir.com' });
     await ZPrinter.cutBluetoothPaper();
     await ZPrinter.kickBluetoothDrawer();
-    await ZPrinter.disconnectBluetooth();
 
-    alert('Print Successful!');
-  } catch (err) {
-    alert('Print Failed: ' + err);
+    // 5. Cleanup
+    await ZPrinter.disconnectBluetooth();
+    
+  } catch (error) {
+    console.error('Print Error:', error);
   }
 };
 ```
 
 ---
 
-## ❓ 5. FAQ & Troubleshooting
+## ❓ 9. FAQ & Troubleshooting
 
 *   **Q: My image is solid black.**
-    *   A: Ensure your image has a white background. Transparent backgrounds are often treated as black by thermal heads.
+    *   A: Ensure your image has a **white background**. Transparent backgrounds are often rendered as black by thermal printers.
 *   **Q: Bluetooth scan finds nothing.**
-    *   A: Ensure Location is ON and permissions are granted on Android.
-*   **Q: Printer prints gibberish.**
-    *   A: This happens if the printer is not ESC/POS compatible or uses a different baud rate (for serial-over-USB).
+    *   A: Ensure **Location Services** are enabled and permissions are granted on Android.
+*   **Q: Network printer won't connect.**
+    *   A: Ensure the device and printer are on the same subnet and port 9100 is open.
+*   **Q: USB printer not listed.**
+    *   A: Ensure you are using a high-quality OTG cable and the printer is powered on.
 
 ---
 
@@ -234,7 +243,7 @@ Need help or enterprise support? Contact me:
 
 ## 🤝 Contributing
 
-We welcome contributions! Please fork the repo and submit a PR.
+We welcome contributions! Please fork the repo and submit a PR. For major changes, please open an issue first to discuss what you would like to change.
 
 ## 📄 License
 
