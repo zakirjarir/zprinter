@@ -1,8 +1,11 @@
 # 🖨️ zprinter v3.0.0
 
+### Developed by **Zakir Jarir**
+
 [![NPM Version](https://img.shields.io/npm/v/zprinter.svg)](https://www.npmjs.com/package/zprinter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Capacitor](https://img.shields.io/badge/Capacitor-8.0+-blue.svg)](https://capacitorjs.com/)
+[![Support](https://img.shields.io/badge/Support-Gmail%20%7C%20LinkedIn-orange.svg)](#📬-support--contact)
 [![Android Support](https://img.shields.io/badge/Android-BT%20%7C%20USB%20%7C%20Network-green.svg)](#android)
 [![iOS Support](https://img.shields.io/badge/iOS-Bluetooth-lightgrey.svg)](#ios)
 
@@ -19,6 +22,16 @@
 *   🔳 **Native QR Code:** Fast, native ESC/POS QR code generation.
 *   ✂️ **Paper Control:** Integrated support for paper cutting.
 *   💰 **Cash Drawer:** Open cash drawers via the printer's DK port.
+
+---
+
+## 📬 Support & Contact
+
+Need help or want to hire me for your project? Feel free to reach out!
+
+*   📧 **Gmail:** [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com)
+*   🔗 **LinkedIn:** [Zakir Jarir](https://www.linkedin.com/in/zakirjarir/)
+*   🌐 **Portfolio:** [zakirjarir.com](https://zakirjarir.com)
 
 ---
 
@@ -113,6 +126,7 @@ async function printFullReceipt() {
 
   } catch (err) {
     console.error('Printing failed:', err);
+    // For support, contact: zakirjarir@gmail.com
   }
 }
 ```
@@ -154,10 +168,8 @@ Thermal printers are 1-bit (Black or White). Ensure your logo is high-contrast. 
 #### 3. USB printing doesn't work?
 Make sure your device supports **USB OTG** and you are using a proper OTG adapter. The printer must be set to USB mode.
 
-#### 4. Paper width issues?
-Thermal printers usually come in **58mm** or **80mm**.
-- For 58mm: Use approx. 32 characters per line.
-- For 80mm: Use approx. 48 characters per line.
+#### 4. Need more help?
+Contact support at [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com) or via [LinkedIn](https://www.linkedin.com/in/zakirjarir/).
 
 ---
 
@@ -174,11 +186,13 @@ We love contributions!
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## ✨ Author
+## ✨ Author & Support
 
-**Zakir Jarir**
+### Created & Developed by **Zakir Jarir**
+
+*   📧 **Gmail:** [zakirjarir@gmail.com](mailto:zakirjarir@gmail.com)
+*   🔗 **LinkedIn:** [zakirjarir](https://www.linkedin.com/in/zakirjarir/)
 *   GitHub: [@zakirjarir](https://github.com/zakirjarir)
-*   LinkedIn: [Zakir Jarir](https://linkedin.com/in/zakirjarir)
 
 ---
 *If you like this project, please give it a ⭐ on GitHub!*
