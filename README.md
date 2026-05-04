@@ -1,4 +1,4 @@
-# 🖨️ zprinter
+# 🖨️ zprinter v3.0.0
 
 [![NPM Version](https://img.shields.io/npm/v/zprinter.svg)](https://www.npmjs.com/package/zprinter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,18 +6,19 @@
 [![Android Support](https://img.shields.io/badge/Android-BT%20%7C%20USB%20%7C%20Network-green.svg)](#android)
 [![iOS Support](https://img.shields.io/badge/iOS-Bluetooth-lightgrey.svg)](#ios)
 
-`zprinter` is a high-performance, native thermal printer plugin for **Ionic** and **Capacitor** apps. Built for reliability in demanding POS, billing, and retail environments.
+`zprinter` is a professional-grade Capacitor plugin for thermal receipt printing. It provides a unified API for Bluetooth, USB, and Network printers, specifically optimized for ESC/POS compatible devices.
 
 ---
 
-## 🚀 Key Features
+## 🌟 Major Features
 
-*   ✅ **Multi-Transport Support:** Bluetooth, USB (Android), and Network/WiFi (Android).
-*   🎨 **Advanced Formatting:** Print images/logos, custom font sizes, bold text, and alignments.
-*   📱 **Native QR Codes:** High-speed ESC/POS QR code generation.
-*   📦 **Paper Handling:** Integrated paper cutting support.
-*   💵 **Cash Drawer:** Open cash drawers connected via DK port.
-*   ⚡ **Async/Await:** Fully promise-based API for seamless integration.
+*   📶 **Bluetooth (BLE/Classic):** Seamless discovery and connection on Android & iOS.
+*   🔌 **USB OTG (Android):** High-speed printing via USB for POS terminals.
+*   🌐 **Network/WiFi (Android):** TCP/IP support for kitchen and remote printers.
+*   🖼️ **Image/Logo Printing:** Advanced grayscale conversion for clear logos.
+*   🔳 **Native QR Code:** Fast, native ESC/POS QR code generation.
+*   ✂️ **Paper Control:** Integrated support for paper cutting.
+*   💰 **Cash Drawer:** Open cash drawers via the printer's DK port.
 
 ---
 
@@ -33,115 +34,145 @@ npx cap sync
 ## 🔧 Native Setup
 
 ### Android
-Add permissions to your `AndroidManifest.xml` (usually handled automatically by Capacitor):
+Ensure your `AndroidManifest.xml` includes these permissions:
 ```xml
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+<!-- Bluetooth permissions -->
+<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<!-- Network & USB -->
 <uses-permission android:name="android.permission.INTERNET" />
+<uses-feature android:name="android.hardware.usb.host" />
 ```
 
 ### iOS
-Add usage descriptions to your `Info.plist`:
+Add these keys to your `Info.plist`:
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
-<string>This app uses Bluetooth to connect to thermal receipt printers.</string>
+<string>We need access to Bluetooth to connect to thermal printers for receipts.</string>
 <key>NSBluetoothPeripheralUsageDescription</key>
-<string>This app uses Bluetooth to connect to thermal receipt printers.</string>
+<string>We need access to Bluetooth to connect to thermal printers for receipts.</string>
 ```
 
 ---
 
-## 📖 Usage Examples
+## 🚀 Professional Receipt Example
 
-### 🔵 Bluetooth Printing (Android & iOS)
+Here is how you can print a complete professional receipt combining multiple features:
+
 ```typescript
 import { ZPrinter } from 'zprinter';
 
-const printReceipt = async () => {
-  // 1. Scan for devices
-  const { devices } = await ZPrinter.scanBluetoothDevices();
-  
-  // 2. Connect
-  await ZPrinter.connectBluetooth({ address: devices[0].address });
+async function printFullReceipt() {
+  try {
+    // 1. Connect (Example: Bluetooth)
+    await ZPrinter.connectBluetooth({ address: '00:11:22:33:44:55' });
 
-  // 3. Print Image/Logo
-  await ZPrinter.printBluetoothImage({
-    base64: 'iVBORw0KGgoAAAANSUhEUgAA...', // Base64 string
-    width: 200,
-    align: 'center'
-  });
+    // 2. Print Logo
+    await ZPrinter.printBluetoothImage({
+      base64: 'iVBORw0KGgoAAAANSUhEUgAA...', // Your Logo Base64
+      width: 150,
+      align: 'center'
+    });
 
-  // 4. Print Text
-  await ZPrinter.printBluetoothText({
-    text: 'Z-Printer Official\n----------------\nItem: Coffee   $5.00',
-    fontSize: 24,
-    align: 'center'
-  });
+    // 3. Header
+    await ZPrinter.printBluetoothText({
+      text: 'Z-PRINTER SHOP\nDhaka, Bangladesh\nTel: +880 12345678',
+      fontSize: 24,
+      align: 'center',
+      isBold: true
+    });
 
-  // 5. Print QR Code
-  await ZPrinter.printBluetoothQRCode({
-    data: 'https://github.com/zakirjarir/zprinter',
-    size: 8
-  });
+    // 4. Body
+    await ZPrinter.printBluetoothText({
+      text: '\nItem Name         Qty    Price\n------------------------------\nCoffee Large      01     $5.00\nBurger King       01    $12.00\n------------------------------\nTOTAL:                  $17.00\n',
+      align: 'left',
+      feedLines: 1
+    });
 
-  // 6. Cut & Disconnect
-  await ZPrinter.cutBluetoothPaper();
-  await ZPrinter.disconnectBluetooth();
-};
-```
+    // 5. QR Code for Payment/Feedback
+    await ZPrinter.printBluetoothQRCode({
+      data: 'https://zakirjarir.com/pay',
+      size: 8,
+      align: 'center'
+    });
 
-### 🌐 Network/WiFi Printing (Android Only)
-```typescript
-await ZPrinter.connectNetworkPrinter({
-  address: '192.168.1.100',
-  port: 9100
-});
+    // 6. Footer & Cut
+    await ZPrinter.printBluetoothText({
+      text: 'Thank you for your visit!',
+      align: 'center',
+      feedLines: 3
+    });
+    
+    await ZPrinter.cutBluetoothPaper();
+    await ZPrinter.kickBluetoothDrawer(); // Open Cash Drawer
+    await ZPrinter.disconnectBluetooth();
 
-await ZPrinter.printNetworkText({ text: 'Order for Table 5' });
-await ZPrinter.disconnectNetworkPrinter();
+  } catch (err) {
+    console.error('Printing failed:', err);
+  }
+}
 ```
 
 ---
 
-## 🛠️ API Reference
+## 🛠️ Detailed API
 
-### Bluetooth Methods
-| Method | Description |
-| :--- | :--- |
-| `scanBluetoothDevices()` | Scans for available Bluetooth printers. |
-| `connectBluetooth(options)` | Connects to a specific Bluetooth printer. |
-| `printBluetoothText(options)` | Prints formatted text. |
-| `printBluetoothImage(options)` | Prints a Base64 image. |
-| `printBluetoothQRCode(options)` | Prints a native QR code. |
-| `kickBluetoothDrawer()` | Opens the cash drawer. |
-| `cutBluetoothPaper()` | Cuts the printer paper. |
+### Bluetooth API
+| Method | Options | Returns |
+| :--- | :--- | :--- |
+| `scanBluetoothDevices()` | - | `Promise<{devices: BluetoothPrinterDevice[]}>` |
+| `connectBluetooth(opt)` | `{address: string}` | `Promise<PrinterConnectionResult>` |
+| `printBluetoothText(opt)` | `PrinterTextOptions` | `Promise<{printed: boolean}>` |
+| `printBluetoothImage(opt)`| `PrinterImageOptions`| `Promise<{printed: boolean}>` |
+| `printBluetoothQRCode(opt)`| `PrinterQRCodeOptions`| `Promise<{printed: boolean}>` |
+| `kickBluetoothDrawer()` | - | `Promise<{kicked: boolean}>` |
+| `cutBluetoothPaper()` | - | `Promise<{cut: boolean}>` |
 
-### USB & Thermal Methods (Android)
-| Method | Description |
-| :--- | :--- |
-| `listUsbPrinters()` | Returns a list of connected USB devices. |
-| `connectUsbPrinter(options)` | Connects via USB OTG. |
-| `printUsbText(options)` | Prints text over USB. |
-| `kickUsbDrawer()` | Opens cash drawer via USB. |
+### Network API (Android)
+| Method | Options | Returns |
+| :--- | :--- | :--- |
+| `connectNetworkPrinter(opt)` | `{address: string, port?: number}` | `Promise<ConnectionResult>` |
+| `printNetworkText(opt)` | `PrinterTextOptions` | `Promise<{printed: boolean}>` |
+| `printNetworkImage(opt)` | `PrinterImageOptions` | `Promise<{printed: boolean}>` |
+| `printNetworkQRCode(opt)` | `PrinterQRCodeOptions` | `Promise<{printed: boolean}>` |
 
-### Network Methods (Android)
-| Method | Description |
-| :--- | :--- |
-| `connectNetworkPrinter(options)` | Connects via TCP/IP. |
-| `printNetworkText(options)` | Prints text over network. |
-| `kickNetworkDrawer()` | Opens cash drawer via network. |
+---
+
+## ❓ FAQ & Troubleshooting
+
+#### 1. Why does my image look blurry?
+Thermal printers are 1-bit (Black or White). Ensure your logo is high-contrast. The plugin uses grayscale dithering, but a pure black/white PNG works best.
+
+#### 2. Bluetooth scan doesn't find any devices?
+- On Android: Ensure **Location** is ON and permissions are granted.
+- On iOS: Ensure the printer is NOT paired in the system settings; the app should find it directly.
+
+#### 3. USB printing doesn't work?
+Make sure your device supports **USB OTG** and you are using a proper OTG adapter. The printer must be set to USB mode.
+
+#### 4. Paper width issues?
+Thermal printers usually come in **58mm** or **80mm**.
+- For 58mm: Use approx. 32 characters per line.
+- For 80mm: Use approx. 48 characters per line.
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
+We love contributions!
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## ✨ Author
 
@@ -150,4 +181,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 *   LinkedIn: [Zakir Jarir](https://linkedin.com/in/zakirjarir)
 
 ---
-*Built with ❤️ for the Capacitor community.*
+*If you like this project, please give it a ⭐ on GitHub!*
