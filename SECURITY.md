@@ -5,9 +5,9 @@
 Currently, we provide security updates for the following versions:
 
 | Version | Supported          |
-| ------- | ------------------ |
-| 2.x.x   | ✅ Yes             |
-| 1.x.x   | ❌ No              |
+|---------| ------------------ |
+| 4.x.x   | ✅ Yes             |
+| 3.x.x   | ✅ Yes             |
 
 ## Reporting a Vulnerability
 
