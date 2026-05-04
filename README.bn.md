@@ -79,8 +79,8 @@ npx cap sync
 git clone git@github.com:zakirjarir/zprinter.git
 npm install
 
-# এরপর example-app এ যান
-cd example-app
+# এরপর zprinter এ যান
+cd zprinter
 npm install
 npm start
 ```
@@ -279,11 +279,11 @@ await ZPrinter.printNetworkText({ text: 'নেটওয়ার্ক প্�
 
 ## 🧪 উদাহরণ অ্যাপ ও লোকাল ডেভেলপমেন্ট
 
-`example-app` ডিরেক্টরিতে সম্পূর্ণ স্ক্যানিং, সংযোগ ও প্রিন্টিং ফ্লো দেখানো হয়েছে।
+`zprinter` ডিরেক্টরিতে সম্পূর্ণ স্ক্যানিং, সংযোগ ও প্রিন্টিং ফ্লো দেখানো হয়েছে।
 
 ```bash
 # উদাহরণ অ্যাপ লোকালি চালান
-cd example-app
+cd zprinter
 npm install
 npm start
 ```

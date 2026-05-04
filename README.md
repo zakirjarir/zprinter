@@ -33,7 +33,7 @@
 - [⚙️ Native Setup](#️-native-setup)
 - [💻 Usage Examples](#-usage-examples)
 - [📖 API Reference](#-api-reference)
-- [🧪 Example App & Local Dev](#-example-app--local-development)
+- [🧪 Example App & Local Dev](#-zprinter--local-development)
 - [🏗️ Building & Publishing](#️-building--publishing)
 - [🔧 Troubleshooting & FAQ](#-troubleshooting--faq)
 - [🤝 Contributing & Support](#-contributing--support)
@@ -78,7 +78,7 @@ npx cap sync
 git clone git@github.com:zakirjarir/zprinter.git
 npm install
 # Then go to the example app
-cd example-app
+cd zprinter
 npm install
 npm start
 ```
@@ -277,11 +277,11 @@ await ZPrinter.printNetworkText({ text: 'Network print\n' });
 
 ## 🧪 Example App & Local Development
 
-The `example-app` directory demonstrates complete scanning, connecting, and printing flows.
+The `zprinter` directory demonstrates complete scanning, connecting, and printing flows.
 
 ```bash
 # Run the example app locally
-cd example-app
+cd zprinter
 npm install
 npm start
 ```
