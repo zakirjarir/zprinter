@@ -18,7 +18,22 @@ public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin, CBCentralManagerDelega
         CAPPluginMethod(name: "disconnectUsbPrinter", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "connectThermalPrinter", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "printThermalText", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "disconnectThermalPrinter", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "printThermalImage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printThermalQRCode", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "kickThermalDrawer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "disconnectThermalPrinter", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printBluetoothImage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printBluetoothQRCode", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "kickBluetoothDrawer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printUsbImage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printUsbQRCode", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "kickUsbDrawer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "connectNetworkPrinter", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printNetworkText", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printNetworkImage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "printNetworkQRCode", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "kickNetworkDrawer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "disconnectNetworkPrinter", returnType: CAPPluginReturnPromise)
     ]
 
     private var centralManager: CBCentralManager?
@@ -101,6 +116,58 @@ public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin, CBCentralManagerDelega
         write(data: data, to: peripheral, characteristic: characteristic, promiseCall: call, resolveKey: "printed")
     }
 
+    @objc public func printBluetoothImage(_ call: CAPPluginCall) {
+        guard let peripheral = connectedPeripheral, let characteristic = writeCharacteristic else {
+            call.reject("No Bluetooth printer connected")
+            return
+        }
+
+        guard let base64 = call.getString("base64"), !base64.isEmpty else {
+            call.reject("Base64 image string is required")
+            return
+        }
+
+        let width = call.getInt("width") ?? 0
+        let height = call.getInt("height") ?? 0
+        let align = call.getString("align") ?? "left"
+
+        pendingPrintCall = call
+        if let data = formatPrintImage(base64: base64, width: width, height: height, align: align) {
+            write(data: data, to: peripheral, characteristic: characteristic, promiseCall: call, resolveKey: "printed")
+        } else {
+            call.reject("Failed to format image")
+        }
+    }
+
+    @objc public func printBluetoothQRCode(_ call: CAPPluginCall) {
+        guard let peripheral = connectedPeripheral, let characteristic = writeCharacteristic else {
+            call.reject("No Bluetooth printer connected")
+            return
+        }
+
+        guard let dataStr = call.getString("data"), !dataStr.isEmpty else {
+            call.reject("QR data is required")
+            return
+        }
+
+        let size = call.getInt("size") ?? 8
+        let align = call.getString("align") ?? "center"
+
+        pendingPrintCall = call
+        let data = formatQRCode(data: dataStr, size: size, align: align)
+        write(data: data, to: peripheral, characteristic: characteristic, promiseCall: call, resolveKey: "printed")
+    }
+
+    @objc public func kickBluetoothDrawer(_ call: CAPPluginCall) {
+        guard let peripheral = connectedPeripheral, let characteristic = writeCharacteristic else {
+            call.reject("No Bluetooth printer connected")
+            return
+        }
+
+        let kickData = Data([0x1B, 0x70, 0x00, 0x19, 0xFA])
+        write(data: kickData, to: peripheral, characteristic: characteristic, promiseCall: call, resolveKey: "kicked")
+    }
+
     @objc public func cutBluetoothPaper(_ call: CAPPluginCall) {
         guard let peripheral = connectedPeripheral, let characteristic = writeCharacteristic else {
             call.reject("No Bluetooth printer connected")
@@ -137,6 +204,18 @@ public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin, CBCentralManagerDelega
         call.reject("Generic USB printers are not supported on iOS. Use Bluetooth printers on iOS.")
     }
 
+    @objc public func printUsbImage(_ call: CAPPluginCall) {
+        call.reject("Generic USB printers are not supported on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func printUsbQRCode(_ call: CAPPluginCall) {
+        call.reject("Generic USB printers are not supported on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func kickUsbDrawer(_ call: CAPPluginCall) {
+        call.reject("Generic USB printers are not supported on iOS. Use Bluetooth printers on iOS.")
+    }
+
     @objc public func disconnectUsbPrinter(_ call: CAPPluginCall) {
         call.resolve()
     }
@@ -149,7 +228,43 @@ public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin, CBCentralManagerDelega
         call.reject("Generic USB thermal printers are not supported on iOS. Use Bluetooth thermal printers on iOS.")
     }
 
+    @objc public func printThermalImage(_ call: CAPPluginCall) {
+        call.reject("Generic USB thermal printers are not supported on iOS. Use Bluetooth thermal printers on iOS.")
+    }
+
+    @objc public func printThermalQRCode(_ call: CAPPluginCall) {
+        call.reject("Generic USB thermal printers are not supported on iOS. Use Bluetooth thermal printers on iOS.")
+    }
+
+    @objc public func kickThermalDrawer(_ call: CAPPluginCall) {
+        call.reject("Generic USB thermal printers are not supported on iOS. Use Bluetooth thermal printers on iOS.")
+    }
+
     @objc public func disconnectThermalPrinter(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    @objc public func connectNetworkPrinter(_ call: CAPPluginCall) {
+        call.reject("Network printing is not yet implemented on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func printNetworkText(_ call: CAPPluginCall) {
+        call.reject("Network printing is not yet implemented on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func printNetworkImage(_ call: CAPPluginCall) {
+        call.reject("Network printing is not yet implemented on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func printNetworkQRCode(_ call: CAPPluginCall) {
+        call.reject("Network printing is not yet implemented on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func kickNetworkDrawer(_ call: CAPPluginCall) {
+        call.reject("Network printing is not yet implemented on iOS. Use Bluetooth printers on iOS.")
+    }
+
+    @objc public func disconnectNetworkPrinter(_ call: CAPPluginCall) {
         call.resolve()
     }
 
@@ -385,6 +500,111 @@ public class ZPrinterPlugin: CAPPlugin, CAPBridgedPlugin, CBCentralManagerDelega
 
         commands.append(contentsOf: [0x1B, 0x45, 0x00])
         commands.append(contentsOf: [0x1D, 0x21, 0x00])
+        commands.append(contentsOf: [0x1B, 0x61, 0x00])
+
+        return commands
+    }
+
+    private func formatQRCode(data: String, size: Int, align: String) -> Data {
+        var commands = Data()
+
+        // Alignment
+        switch align {
+        case "center":
+            commands.append(contentsOf: [0x1B, 0x61, 0x01])
+        case "right":
+            commands.append(contentsOf: [0x1B, 0x61, 0x02])
+        default:
+            commands.append(contentsOf: [0x1B, 0x61, 0x00])
+        }
+
+        let storeLen = data.count + 3
+        let storePL = UInt8(storeLen % 256)
+        let storePH = UInt8(storeLen / 256)
+
+        // Model
+        commands.append(contentsOf: [0x1D, 0x28, 0x6B, 0x04, 0x00, 0x31, 0x41, 0x32, 0x00])
+        // Size
+        commands.append(contentsOf: [0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, UInt8(min(max(size, 1), 16))])
+        // Error Correction (Level L)
+        commands.append(contentsOf: [0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x30])
+        // Store data
+        commands.append(contentsOf: [0x1D, 0x28, 0x6B, storePL, storePH, 0x31, 0x50, 0x30])
+        if let dataBytes = data.data(using: .utf8) {
+            commands.append(dataBytes)
+        }
+        // Print
+        commands.append(contentsOf: [0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30])
+
+        commands.append(0x0A)
+        commands.append(contentsOf: [0x1B, 0x61, 0x00])
+
+        return commands
+    }
+
+    private func formatPrintImage(base64: String, width: Int, height: Int, align: String) -> Data? {
+        guard let data = Data(base64Encoded: base64), let image = UIImage(data: data) else {
+            return nil
+        }
+
+        var targetImage = image
+        if width > 0 && height > 0 {
+            let size = CGSize(width: width, height: height)
+            UIGraphicsBeginImageContext(size)
+            image.draw(in: CGRect(origin: .zero, size: size))
+            targetImage = UIGraphicsGetImageFromCurrentImageContext() ?? image
+            UIGraphicsEndImageContext()
+        }
+
+        let bw = Int(targetImage.size.width)
+        let bh = Int(targetImage.size.height)
+        let xL = UInt8((bw / 8) % 256)
+        let xH = UInt8((bw / 8) / 256)
+        let yL = UInt8(bh % 256)
+        let yH = UInt8(bh / 256)
+
+        var commands = Data()
+        
+        // Alignment
+        switch align {
+        case "center":
+            commands.append(contentsOf: [0x1B, 0x61, 0x01])
+        case "right":
+            commands.append(contentsOf: [0x1B, 0x61, 0x02])
+        default:
+            commands.append(contentsOf: [0x1B, 0x61, 0x00])
+        }
+
+        commands.append(contentsOf: [0x1D, 0x76, 0x30, 0x00, xL, xH, yL, yH])
+
+        // Get pixel data
+        guard let cgImage = targetImage.cgImage else { return nil }
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let bitmapInfo = CGImageAlphaInfo.none.rawValue
+        guard let context = CGContext(data: nil, width: bw, height: bh, bitsPerComponent: 8, bytesPerRow: bw, space: colorSpace, bitmapInfo: bitmapInfo) else {
+            return nil
+        }
+
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: bw, height: bh))
+        guard let pixelData = context.data else { return nil }
+        let pixels = pixelData.bindMemory(to: UInt8.self, capacity: bw * bh)
+
+        for y in 0..<bh {
+            for x in stride(from: 0, to: bw, by: 8) {
+                var b: UInt8 = 0
+                for bit in 0..<8 {
+                    if x + bit < bw {
+                        let gray = pixels[y * bw + x + bit]
+                        if gray < 128 {
+                            b |= (0x80 >> bit)
+                        }
+                    }
+                }
+                commands.append(b)
+            }
+        }
+
+        commands.append(0x0A)
         commands.append(contentsOf: [0x1B, 0x61, 0x00])
 
         return commands

@@ -54,6 +54,52 @@
         "slug": "printbluetoothtext"
       },
       {
+        "name": "printBluetoothImage",
+        "signature": "(options: PrinterImageOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterImageOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterImageOptions"
+        ],
+        "slug": "printbluetoothimage"
+      },
+      {
+        "name": "printBluetoothQRCode",
+        "signature": "(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterQRCodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterQRCodeOptions"
+        ],
+        "slug": "printbluetoothqrcode"
+      },
+      {
+        "name": "kickBluetoothDrawer",
+        "signature": "() => Promise<{ kicked: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ kicked: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "kickbluetoothdrawer"
+      },
+      {
         "name": "cutBluetoothPaper",
         "signature": "() => Promise<{ cut: boolean; }>",
         "parameters": [],
@@ -123,6 +169,52 @@
         "slug": "printusbtext"
       },
       {
+        "name": "printUsbImage",
+        "signature": "(options: PrinterImageOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterImageOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterImageOptions"
+        ],
+        "slug": "printusbimage"
+      },
+      {
+        "name": "printUsbQRCode",
+        "signature": "(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterQRCodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterQRCodeOptions"
+        ],
+        "slug": "printusbqrcode"
+      },
+      {
+        "name": "kickUsbDrawer",
+        "signature": "() => Promise<{ kicked: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ kicked: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "kickusbdrawer"
+      },
+      {
         "name": "disconnectUsbPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
@@ -170,6 +262,52 @@
         "slug": "printthermaltext"
       },
       {
+        "name": "printThermalImage",
+        "signature": "(options: PrinterImageOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterImageOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterImageOptions"
+        ],
+        "slug": "printthermalimage"
+      },
+      {
+        "name": "printThermalQRCode",
+        "signature": "(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterQRCodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterQRCodeOptions"
+        ],
+        "slug": "printthermalqrcode"
+      },
+      {
+        "name": "kickThermalDrawer",
+        "signature": "() => Promise<{ kicked: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ kicked: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "kickthermaldrawer"
+      },
+      {
         "name": "disconnectThermalPrinter",
         "signature": "() => Promise<void>",
         "parameters": [],
@@ -178,6 +316,99 @@
         "docs": "",
         "complexTypes": [],
         "slug": "disconnectthermalprinter"
+      },
+      {
+        "name": "connectNetworkPrinter",
+        "signature": "(options: NetworkPrinterConnectOptions) => Promise<PrinterConnectionResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "NetworkPrinterConnectOptions"
+          }
+        ],
+        "returns": "Promise<PrinterConnectionResult>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterConnectionResult",
+          "NetworkPrinterConnectOptions"
+        ],
+        "slug": "connectnetworkprinter"
+      },
+      {
+        "name": "printNetworkText",
+        "signature": "(options: PrinterTextOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterTextOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterTextOptions"
+        ],
+        "slug": "printnetworktext"
+      },
+      {
+        "name": "printNetworkImage",
+        "signature": "(options: PrinterImageOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterImageOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterImageOptions"
+        ],
+        "slug": "printnetworkimage"
+      },
+      {
+        "name": "printNetworkQRCode",
+        "signature": "(options: PrinterQRCodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterQRCodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterQRCodeOptions"
+        ],
+        "slug": "printnetworkqrcode"
+      },
+      {
+        "name": "kickNetworkDrawer",
+        "signature": "() => Promise<{ kicked: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ kicked: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "kicknetworkdrawer"
+      },
+      {
+        "name": "disconnectNetworkPrinter",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disconnectnetworkprinter"
       }
     ],
     "properties": []
@@ -302,6 +533,73 @@
       ]
     },
     {
+      "name": "PrinterImageOptions",
+      "slug": "printerimageoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "base64",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "height",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "align",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'left' | 'center' | 'right' | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterQRCodeOptions",
+      "slug": "printerqrcodeoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "data",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "align",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'left' | 'center' | 'right' | undefined"
+        }
+      ]
+    },
+    {
       "name": "UsbPrinterDevice",
       "slug": "usbprinterdevice",
       "docs": "",
@@ -379,6 +677,29 @@
           "docs": "",
           "complexTypes": [],
           "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "NetworkPrinterConnectOptions",
+      "slug": "networkprinterconnectoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "port",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
         }
       ]
     }

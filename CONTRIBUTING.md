@@ -1,52 +1,57 @@
-# Contributing
+# Contributing to zprinter
 
-This guide provides instructions for contributing to this Capacitor plugin.
+First off, thank you for considering contributing to `zprinter`! It's people like you that make the open-source community such an amazing place to learn, inspire, and create.
 
-## Developing
+## 🌈 Code of Conduct
 
-### Local Setup
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-1. Fork and clone the repo.
-1. Install the dependencies.
+## 🚀 How Can I Contribute?
 
-    ```shell
-    npm install
-    ```
+### Reporting Bugs
+*   Check the [Issues](https://github.com/zakirjarir/zprinter/issues) to see if the bug has already been reported.
+*   If not, open a new issue. Include a clear title, a description of the problem, and steps to reproduce the bug.
 
-1. Install SwiftLint if you're on macOS.
+### Suggesting Enhancements
+*   Open an issue with the "enhancement" label.
+*   Describe the feature you'd like to see and why it would be useful.
 
-    ```shell
-    brew install swiftlint
-    ```
+### Pull Requests
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix: `git checkout -b feature/my-new-feature`.
+3.  Commit your changes with descriptive commit messages.
+4.  Push to your branch: `git push origin feature/my-new-feature`.
+5.  Open a Pull Request against the `main` branch.
 
-### Scripts
+## 🛠️ Development Setup
 
-#### `npm run build`
+### Prerequisites
+*   Node.js (LTS recommended)
+*   Android Studio (for Android development)
+*   Xcode (for iOS development, macOS only)
+*   Capacitor CLI (`npm install -g @capacitor/cli`)
 
-Build the plugin web assets and generate plugin API documentation using [`@capacitor/docgen`](https://github.com/ionic-team/capacitor-docgen).
-
-It will compile the TypeScript code from `src/` into ESM JavaScript in `dist/esm/`. These files are used in apps with bundlers when your plugin is imported.
-
-Then, Rollup will bundle the code into a single file at `dist/plugin.js`. This file is used in apps without bundlers by including it as a script in `index.html`.
-
-#### `npm run verify`
-
-Build and validate the web and native projects.
-
-This is useful to run in CI to verify that the plugin builds for all platforms.
-
-#### `npm run lint` / `npm run fmt`
-
-Check formatting and code quality, autoformat/autofix if possible.
-
-This template is integrated with ESLint, Prettier, and SwiftLint. Using these tools is completely optional, but the [Capacitor Community](https://github.com/capacitor-community/) strives to have consistent code style and structure for easier cooperation.
-
-## Publishing
-
-There is a `prepublishOnly` hook in `package.json` which prepares the plugin before publishing, so all you need to do is run:
-
-```shell
-npm publish
+### Initial Setup
+```bash
+git clone https://github.com/zakirjarir/zprinter.git
+cd zprinter
+npm install
 ```
 
-> **Note**: The [`files`](https://docs.npmjs.com/cli/v7/configuring-npm/package-json#files) array in `package.json` specifies which files get published. If you rename files/directories or add files elsewhere, you may need to update it.
+### Build Scripts
+*   `npm run build`: Compiles TypeScript and bundles the plugin.
+*   `npm run lint`: Checks for code style issues.
+*   `npm run fmt`: Automatically fixes formatting issues.
+*   `npm run verify`: Runs build and linting checks for all platforms.
+
+## 📝 Commit Message Guidelines
+We follow a basic [Conventional Commits](https://www.conventionalcommits.org/) format:
+*   `feat: add support for image printing`
+*   `fix: resolve bluetooth connection timeout`
+*   `docs: update readme with new API methods`
+
+## ❓ Questions?
+Feel free to open an issue for any questions or join our community discussions.
+
+---
+*Happy coding!* 🚀

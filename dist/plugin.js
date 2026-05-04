@@ -28,6 +28,18 @@ var capacitorZPrinter = (function (exports, core) {
             }
             return { printed: true };
         }
+        async printBluetoothImage() {
+            console.warn('Web: printBluetoothImage not supported');
+            return { printed: false };
+        }
+        async printBluetoothQRCode() {
+            console.warn('Web: printBluetoothQRCode not supported');
+            return { printed: false };
+        }
+        async kickBluetoothDrawer() {
+            console.warn('Web: kickBluetoothDrawer not supported');
+            return { kicked: false };
+        }
         async cutBluetoothPaper() {
             console.warn('Web: cutBluetoothPaper not supported');
             return { cut: false };
@@ -44,11 +56,25 @@ var capacitorZPrinter = (function (exports, core) {
             return {
                 connected: false,
                 deviceName: '',
+                vendorId: 0,
+                productId: 0,
             };
         }
         async printUsbText(options) {
             console.log('Web USB print fallback:', options.text);
             return { printed: true };
+        }
+        async printUsbImage() {
+            console.warn('Web: printUsbImage not supported');
+            return { printed: false };
+        }
+        async printUsbQRCode() {
+            console.warn('Web: printUsbQRCode not supported');
+            return { printed: false };
+        }
+        async kickUsbDrawer() {
+            console.warn('Web: kickUsbDrawer not supported');
+            return { kicked: false };
         }
         async disconnectUsbPrinter() {
             console.warn('Web: disconnectUsbPrinter not supported');
@@ -58,14 +84,54 @@ var capacitorZPrinter = (function (exports, core) {
             return {
                 connected: false,
                 deviceName: '',
+                vendorId: 0,
+                productId: 0,
             };
         }
         async printThermalText(options) {
             console.log('Web Thermal print fallback:', options.text);
             return { printed: true };
         }
+        async printThermalImage() {
+            console.warn('Web: printThermalImage not supported');
+            return { printed: false };
+        }
+        async printThermalQRCode() {
+            console.warn('Web: printThermalQRCode not supported');
+            return { printed: false };
+        }
+        async kickThermalDrawer() {
+            console.warn('Web: kickThermalDrawer not supported');
+            return { kicked: false };
+        }
         async disconnectThermalPrinter() {
             console.warn('Web: disconnectThermalPrinter not supported');
+        }
+        async connectNetworkPrinter() {
+            console.warn('Web: connectNetworkPrinter not supported');
+            return {
+                connected: false,
+                deviceName: '',
+            };
+        }
+        async printNetworkText(options) {
+            console.log('Web Network print fallback:', options.text);
+            return { printed: true };
+        }
+        async printNetworkImage() {
+            console.warn('Web: printNetworkImage not supported');
+            return { printed: false };
+        }
+        async printNetworkQRCode() {
+            console.warn('Web: printNetworkQRCode not supported');
+            return { printed: false };
+        }
+        async kickNetworkDrawer() {
+            console.warn('Web: kickNetworkDrawer not supported');
+            return { kicked: false };
+        }
+        async disconnectNetworkPrinter() {
+            console.warn('Web: disconnectNetworkPrinter not supported');
         }
     }
 

@@ -1,7 +1,7 @@
 {
   "name": "zprinter",
   "version": "2.0.2",
-  "description": "this is a printer plugin",
+  "description": "High-performance Capacitor plugin for Bluetooth, USB, and Network thermal printing. Supports Image, QR Code, and Cash Drawer.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -21,7 +21,8 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "Zprinter.podspec"
+    "Zprinter.podspec",
+    "LICENSE"
   ],
   "author": "Zakir Jarir",
   "license": "MIT",
@@ -32,10 +33,21 @@
   "bugs": {
     "url": "https://github.com/zakirjarir/zprinter/issues"
   },
+  "homepage": "https://github.com/zakirjarir/zprinter#readme",
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "printer",
+    "thermal",
+    "receipt",
+    "bluetooth",
+    "usb",
+    "esc-pos",
+    "pos",
+    "qrcode",
+    "image-printing",
+    "cash-drawer"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
