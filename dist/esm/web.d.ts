@@ -1,27 +1,37 @@
 import { WebPlugin } from '@capacitor/core';
-import type { ZPrinterPlugin } from './definitions';
+import type { BluetoothPrinterDevice, HtmlNativePrintOptions, HtmlToImageResult, HtmlToPdfResult, PrinterConnectionResult, PrinterStatusResult, PrinterTextOptions, SavedPrintersResult, UsbPrinterDevice, ZPrinterPlugin } from './definitions';
 export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
+    getSavedPrinters(): Promise<SavedPrintersResult>;
+    reconnectSavedPrinter(): Promise<PrinterConnectionResult>;
+    clearSavedPrinter(): Promise<void>;
+    htmlToImage(): Promise<HtmlToImageResult>;
+    htmlToPdf(): Promise<HtmlToPdfResult>;
+    printHtmlNative(options: HtmlNativePrintOptions): Promise<{
+        printed: boolean;
+        jobName: string;
+    }>;
+    printHtmlToThermal(): Promise<{
+        printed: boolean;
+    }>;
     scanBluetoothDevices(): Promise<{
-        devices: {
-            name: string;
-            address: string;
-        }[];
+        devices: BluetoothPrinterDevice[];
         count: number;
     }>;
-    connectBluetooth(): Promise<{
-        connected: boolean;
-        deviceName: string;
-        deviceAddress: string;
-    }>;
-    printBluetoothText(options: {
-        text: string;
-    }): Promise<{
+    connectBluetooth(): Promise<PrinterConnectionResult>;
+    isBluetoothConnected(): Promise<PrinterStatusResult>;
+    printBluetoothText(options: PrinterTextOptions): Promise<{
         printed: boolean;
     }>;
     printBluetoothImage(): Promise<{
         printed: boolean;
     }>;
     printBluetoothQRCode(): Promise<{
+        printed: boolean;
+    }>;
+    printBluetoothBarcode(): Promise<{
+        printed: boolean;
+    }>;
+    sendRawBluetooth(): Promise<{
         printed: boolean;
     }>;
     kickBluetoothDrawer(): Promise<{
@@ -32,18 +42,12 @@ export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
     }>;
     disconnectBluetooth(): Promise<void>;
     listUsbPrinters(): Promise<{
-        devices: any[];
+        devices: UsbPrinterDevice[];
         count: number;
     }>;
-    connectUsbPrinter(): Promise<{
-        connected: boolean;
-        deviceName: string;
-        vendorId: number;
-        productId: number;
-    }>;
-    printUsbText(options: {
-        text: string;
-    }): Promise<{
+    connectUsbPrinter(): Promise<PrinterConnectionResult>;
+    isUsbConnected(): Promise<PrinterStatusResult>;
+    printUsbText(options: PrinterTextOptions): Promise<{
         printed: boolean;
     }>;
     printUsbImage(): Promise<{
@@ -52,19 +56,22 @@ export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
     printUsbQRCode(): Promise<{
         printed: boolean;
     }>;
+    printUsbBarcode(): Promise<{
+        printed: boolean;
+    }>;
+    sendRawUsb(): Promise<{
+        printed: boolean;
+    }>;
     kickUsbDrawer(): Promise<{
         kicked: boolean;
     }>;
-    disconnectUsbPrinter(): Promise<void>;
-    connectThermalPrinter(): Promise<{
-        connected: boolean;
-        deviceName: string;
-        vendorId: number;
-        productId: number;
+    cutUsbPaper(): Promise<{
+        cut: boolean;
     }>;
-    printThermalText(options: {
-        text: string;
-    }): Promise<{
+    disconnectUsbPrinter(): Promise<void>;
+    connectThermalPrinter(): Promise<PrinterConnectionResult>;
+    isThermalConnected(): Promise<PrinterStatusResult>;
+    printThermalText(options: PrinterTextOptions): Promise<{
         printed: boolean;
     }>;
     printThermalImage(): Promise<{
@@ -73,17 +80,22 @@ export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
     printThermalQRCode(): Promise<{
         printed: boolean;
     }>;
+    printThermalBarcode(): Promise<{
+        printed: boolean;
+    }>;
+    sendRawThermal(): Promise<{
+        printed: boolean;
+    }>;
     kickThermalDrawer(): Promise<{
         kicked: boolean;
     }>;
-    disconnectThermalPrinter(): Promise<void>;
-    connectNetworkPrinter(): Promise<{
-        connected: boolean;
-        deviceName: string;
+    cutThermalPaper(): Promise<{
+        cut: boolean;
     }>;
-    printNetworkText(options: {
-        text: string;
-    }): Promise<{
+    disconnectThermalPrinter(): Promise<void>;
+    connectNetworkPrinter(): Promise<PrinterConnectionResult>;
+    isNetworkConnected(): Promise<PrinterStatusResult>;
+    printNetworkText(options: PrinterTextOptions): Promise<{
         printed: boolean;
     }>;
     printNetworkImage(): Promise<{
@@ -92,8 +104,17 @@ export declare class ZPrinterWeb extends WebPlugin implements ZPrinterPlugin {
     printNetworkQRCode(): Promise<{
         printed: boolean;
     }>;
+    printNetworkBarcode(): Promise<{
+        printed: boolean;
+    }>;
+    sendRawNetwork(): Promise<{
+        printed: boolean;
+    }>;
     kickNetworkDrawer(): Promise<{
         kicked: boolean;
+    }>;
+    cutNetworkPaper(): Promise<{
+        cut: boolean;
     }>;
     disconnectNetworkPrinter(): Promise<void>;
 }

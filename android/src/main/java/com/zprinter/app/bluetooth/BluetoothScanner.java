@@ -1,15 +1,19 @@
 package com.zprinter.app.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import androidx.core.content.ContextCompat;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class BluetoothScanner {
     private ScanListener scanListener;
     private JSArray devicesArray;
     private List<String> deviceAddresses;
+    private boolean finished;
 
     public interface ScanListener {
         void onFinished(JSArray devices);
@@ -36,12 +41,21 @@ public class BluetoothScanner {
     }
 
     public void scan(Activity activity, ScanListener listener) {
+        stopInternal(false);
+
         this.activity = activity;
         this.scanListener = listener;
         this.devicesArray = new JSArray();
         this.deviceAddresses = new ArrayList<>();
+        this.finished = false;
 
-        adapter = BluetoothAdapter.getDefaultAdapter();
+        if (activity == null) {
+            listener.onError("Activity is unavailable");
+            return;
+        }
+
+        BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
+        adapter = bluetoothManager != null ? bluetoothManager.getAdapter() : null;
         if (adapter == null) {
             listener.onError("Bluetooth is not supported on this device");
             return;
@@ -59,6 +73,7 @@ public class BluetoothScanner {
         stopInternal(false);
     }
 
+    @SuppressLint("MissingPermission")
     private void startBluetoothScan() {
         addPairedDevices();
 
@@ -68,7 +83,7 @@ public class BluetoothScanner {
                 String action = intent.getAction();
 
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    BluetoothDevice device = getBluetoothDeviceExtra(intent);
                     if (device == null) {
                         return;
                     }
@@ -78,10 +93,21 @@ public class BluetoothScanner {
                         return;
                     }
 
+                    String name = "Unknown Device";
+                    boolean isPaired = false;
+                    try {
+                        if (device.getName() != null && !device.getName().isEmpty()) {
+                            name = device.getName();
+                        }
+                        isPaired = device.getBondState() == BluetoothDevice.BOND_BONDED;
+                    } catch (SecurityException exception) {
+                        Log.w(TAG, "Unable to read Bluetooth device metadata", exception);
+                    }
+
                     JSObject deviceJson = new JSObject();
-                    deviceJson.put("name", device.getName() != null ? device.getName() : "Unknown Device");
+                    deviceJson.put("name", name);
                     deviceJson.put("address", address);
-                    deviceJson.put("isPaired", device.getBondState() == BluetoothDevice.BOND_BONDED);
+                    deviceJson.put("isPaired", isPaired);
 
                     deviceAddresses.add(address);
                     devicesArray.put(deviceJson);
@@ -98,16 +124,29 @@ public class BluetoothScanner {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        activity.registerReceiver(receiver, filter);
+        ContextCompat.registerReceiver(activity, receiver, filter, ContextCompat.RECEIVER_EXPORTED);
 
-        if (adapter.isDiscovering()) {
-            adapter.cancelDiscovery();
-        }
+        try {
+            if (adapter.isDiscovering()) {
+                adapter.cancelDiscovery();
+            }
 
-        if (!adapter.startDiscovery()) {
+            if (!adapter.startDiscovery()) {
+                // Even if active discovery cannot start, return already-paired printers instead of failing
+                if (devicesArray.length() > 0) {
+                    stopInternal(true);
+                } else {
+                    stopInternal(false);
+                    if (scanListener != null) {
+                        scanListener.onError("Failed to start Bluetooth discovery");
+                    }
+                }
+                return;
+            }
+        } catch (SecurityException exception) {
             stopInternal(false);
             if (scanListener != null) {
-                scanListener.onError("Failed to start Bluetooth discovery");
+                scanListener.onError("Bluetooth scan permission denied: " + exception.getMessage());
             }
             return;
         }
@@ -115,6 +154,7 @@ public class BluetoothScanner {
         handler.postDelayed(() -> stopInternal(true), SCAN_DURATION_MS);
     }
 
+    @SuppressLint("MissingPermission")
     private void addPairedDevices() {
         try {
             Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
@@ -128,8 +168,10 @@ public class BluetoothScanner {
                     continue;
                 }
 
+                String name = device.getName() != null && !device.getName().isEmpty() ? device.getName() : "Unknown Device";
+
                 JSObject deviceJson = new JSObject();
-                deviceJson.put("name", device.getName() != null ? device.getName() : "Unknown Device");
+                deviceJson.put("name", name);
                 deviceJson.put("address", address);
                 deviceJson.put("isPaired", true);
 
@@ -141,12 +183,15 @@ public class BluetoothScanner {
         }
     }
 
-    private void stopInternal(boolean notifyFinished) {
+    @SuppressLint("MissingPermission")
+    private synchronized void stopInternal(boolean notifyFinished) {
         handler.removeCallbacksAndMessages(null);
 
-        if (adapter != null && adapter.isDiscovering()) {
-            adapter.cancelDiscovery();
-        }
+        try {
+            if (adapter != null && adapter.isDiscovering()) {
+                adapter.cancelDiscovery();
+            }
+        } catch (SecurityException ignored) {}
 
         if (receiver != null && activity != null) {
             try {
@@ -155,8 +200,21 @@ public class BluetoothScanner {
             receiver = null;
         }
 
-        if (notifyFinished && scanListener != null) {
-            scanListener.onFinished(devicesArray != null ? devicesArray : new JSArray());
+        if (notifyFinished && !finished && scanListener != null) {
+            finished = true;
+            ScanListener listener = scanListener;
+            scanListener = null;
+            listener.onFinished(devicesArray != null ? devicesArray : new JSArray());
+        } else if (!notifyFinished) {
+            finished = true;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private BluetoothDevice getBluetoothDeviceExtra(Intent intent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice.class);
+        }
+        return intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
     }
 }

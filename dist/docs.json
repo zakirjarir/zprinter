@@ -6,6 +6,129 @@
     "tags": [],
     "methods": [
       {
+        "name": "getSavedPrinters",
+        "signature": "() => Promise<SavedPrintersResult>",
+        "parameters": [],
+        "returns": "Promise<SavedPrintersResult>",
+        "tags": [],
+        "docs": "Returns all printers saved persistently on the device for automatic reconnection.",
+        "complexTypes": [
+          "SavedPrintersResult"
+        ],
+        "slug": "getsavedprinters"
+      },
+      {
+        "name": "reconnectSavedPrinter",
+        "signature": "(options: { type: PrinterType; }) => Promise<PrinterConnectionResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ type: PrinterType; }"
+          }
+        ],
+        "returns": "Promise<PrinterConnectionResult>",
+        "tags": [],
+        "docs": "Explicitly reconnects to a previously saved printer.",
+        "complexTypes": [
+          "PrinterConnectionResult",
+          "PrinterType"
+        ],
+        "slug": "reconnectsavedprinter"
+      },
+      {
+        "name": "clearSavedPrinter",
+        "signature": "(options?: { type?: PrinterType | \"all\" | undefined; } | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ type?: PrinterType | 'all' | undefined; } | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "Clears saved printer info for one transport or all transports.",
+        "complexTypes": [
+          "PrinterType"
+        ],
+        "slug": "clearsavedprinter"
+      },
+      {
+        "name": "htmlToImage",
+        "signature": "(options: HtmlToImageOptions) => Promise<HtmlToImageResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "HtmlToImageOptions"
+          }
+        ],
+        "returns": "Promise<HtmlToImageResult>",
+        "tags": [],
+        "docs": "Natively renders an HTML structure into a PNG or JPEG Base64 image.",
+        "complexTypes": [
+          "HtmlToImageResult",
+          "HtmlToImageOptions"
+        ],
+        "slug": "htmltoimage"
+      },
+      {
+        "name": "htmlToPdf",
+        "signature": "(options: HtmlToPdfOptions) => Promise<HtmlToPdfResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "HtmlToPdfOptions"
+          }
+        ],
+        "returns": "Promise<HtmlToPdfResult>",
+        "tags": [],
+        "docs": "Natively converts an HTML structure into a multi-page or receipt PDF (Base64 + optional saved filePath).",
+        "complexTypes": [
+          "HtmlToPdfResult",
+          "HtmlToPdfOptions"
+        ],
+        "slug": "htmltopdf"
+      },
+      {
+        "name": "printHtmlNative",
+        "signature": "(options: HtmlNativePrintOptions) => Promise<{ printed: boolean; jobName: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "HtmlNativePrintOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; jobName: string; }>",
+        "tags": [],
+        "docs": "Opens the device's native print dialog (Android Print Framework / iOS AirPrint) for an HTML document.\nSupports office/home Wi-Fi printers (HP, Canon, Epson, Brother) and Save as PDF.",
+        "complexTypes": [
+          "HtmlNativePrintOptions"
+        ],
+        "slug": "printhtmlnative"
+      },
+      {
+        "name": "printHtmlToThermal",
+        "signature": "(options: HtmlThermalPrintOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "HtmlThermalPrintOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "Natively renders HTML (with CSS & Bangla/Unicode fonts) to an image and prints directly to a\nBluetooth, USB, Thermal, or Network thermal receipt printer (with auto-reconnect, optional cut & cash drawer).",
+        "complexTypes": [
+          "HtmlThermalPrintOptions"
+        ],
+        "slug": "printhtmltothermal"
+      },
+      {
         "name": "scanBluetoothDevices",
         "signature": "() => Promise<{ devices: BluetoothPrinterDevice[]; count: number; }>",
         "parameters": [],
@@ -34,6 +157,18 @@
           "PrinterConnectionResult"
         ],
         "slug": "connectbluetooth"
+      },
+      {
+        "name": "isBluetoothConnected",
+        "signature": "() => Promise<PrinterStatusResult>",
+        "parameters": [],
+        "returns": "Promise<PrinterStatusResult>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterStatusResult"
+        ],
+        "slug": "isbluetoothconnected"
       },
       {
         "name": "printBluetoothText",
@@ -90,33 +225,93 @@
         "slug": "printbluetoothqrcode"
       },
       {
+        "name": "printBluetoothBarcode",
+        "signature": "(options: PrinterBarcodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterBarcodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterBarcodeOptions"
+        ],
+        "slug": "printbluetoothbarcode"
+      },
+      {
+        "name": "sendRawBluetooth",
+        "signature": "(options: PrinterRawDataOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterRawDataOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterRawDataOptions"
+        ],
+        "slug": "sendrawbluetooth"
+      },
+      {
         "name": "kickBluetoothDrawer",
-        "signature": "() => Promise<{ kicked: boolean; }>",
-        "parameters": [],
+        "signature": "(options?: PrinterDrawerOptions | undefined) => Promise<{ kicked: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDrawerOptions | undefined"
+          }
+        ],
         "returns": "Promise<{ kicked: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDrawerOptions"
+        ],
         "slug": "kickbluetoothdrawer"
       },
       {
         "name": "cutBluetoothPaper",
-        "signature": "() => Promise<{ cut: boolean; }>",
-        "parameters": [],
+        "signature": "(options?: PrinterCutOptions | undefined) => Promise<{ cut: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterCutOptions | undefined"
+          }
+        ],
         "returns": "Promise<{ cut: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterCutOptions"
+        ],
         "slug": "cutbluetoothpaper"
       },
       {
         "name": "disconnectBluetooth",
-        "signature": "() => Promise<void>",
-        "parameters": [],
+        "signature": "(options?: PrinterDisconnectOptions | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDisconnectOptions | undefined"
+          }
+        ],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDisconnectOptions"
+        ],
         "slug": "disconnectbluetooth"
       },
       {
@@ -149,6 +344,18 @@
           "UsbPrinterConnectOptions"
         ],
         "slug": "connectusbprinter"
+      },
+      {
+        "name": "isUsbConnected",
+        "signature": "() => Promise<PrinterStatusResult>",
+        "parameters": [],
+        "returns": "Promise<PrinterStatusResult>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterStatusResult"
+        ],
+        "slug": "isusbconnected"
       },
       {
         "name": "printUsbText",
@@ -205,23 +412,93 @@
         "slug": "printusbqrcode"
       },
       {
+        "name": "printUsbBarcode",
+        "signature": "(options: PrinterBarcodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterBarcodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterBarcodeOptions"
+        ],
+        "slug": "printusbbarcode"
+      },
+      {
+        "name": "sendRawUsb",
+        "signature": "(options: PrinterRawDataOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterRawDataOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterRawDataOptions"
+        ],
+        "slug": "sendrawusb"
+      },
+      {
         "name": "kickUsbDrawer",
-        "signature": "() => Promise<{ kicked: boolean; }>",
-        "parameters": [],
+        "signature": "(options?: PrinterDrawerOptions | undefined) => Promise<{ kicked: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDrawerOptions | undefined"
+          }
+        ],
         "returns": "Promise<{ kicked: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDrawerOptions"
+        ],
         "slug": "kickusbdrawer"
       },
       {
+        "name": "cutUsbPaper",
+        "signature": "(options?: PrinterCutOptions | undefined) => Promise<{ cut: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterCutOptions | undefined"
+          }
+        ],
+        "returns": "Promise<{ cut: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterCutOptions"
+        ],
+        "slug": "cutusbpaper"
+      },
+      {
         "name": "disconnectUsbPrinter",
-        "signature": "() => Promise<void>",
-        "parameters": [],
+        "signature": "(options?: PrinterDisconnectOptions | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDisconnectOptions | undefined"
+          }
+        ],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDisconnectOptions"
+        ],
         "slug": "disconnectusbprinter"
       },
       {
@@ -242,6 +519,18 @@
           "UsbPrinterConnectOptions"
         ],
         "slug": "connectthermalprinter"
+      },
+      {
+        "name": "isThermalConnected",
+        "signature": "() => Promise<PrinterStatusResult>",
+        "parameters": [],
+        "returns": "Promise<PrinterStatusResult>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterStatusResult"
+        ],
+        "slug": "isthermalconnected"
       },
       {
         "name": "printThermalText",
@@ -298,23 +587,93 @@
         "slug": "printthermalqrcode"
       },
       {
+        "name": "printThermalBarcode",
+        "signature": "(options: PrinterBarcodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterBarcodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterBarcodeOptions"
+        ],
+        "slug": "printthermalbarcode"
+      },
+      {
+        "name": "sendRawThermal",
+        "signature": "(options: PrinterRawDataOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterRawDataOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterRawDataOptions"
+        ],
+        "slug": "sendrawthermal"
+      },
+      {
         "name": "kickThermalDrawer",
-        "signature": "() => Promise<{ kicked: boolean; }>",
-        "parameters": [],
+        "signature": "(options?: PrinterDrawerOptions | undefined) => Promise<{ kicked: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDrawerOptions | undefined"
+          }
+        ],
         "returns": "Promise<{ kicked: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDrawerOptions"
+        ],
         "slug": "kickthermaldrawer"
       },
       {
+        "name": "cutThermalPaper",
+        "signature": "(options?: PrinterCutOptions | undefined) => Promise<{ cut: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterCutOptions | undefined"
+          }
+        ],
+        "returns": "Promise<{ cut: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterCutOptions"
+        ],
+        "slug": "cutthermalpaper"
+      },
+      {
         "name": "disconnectThermalPrinter",
-        "signature": "() => Promise<void>",
-        "parameters": [],
+        "signature": "(options?: PrinterDisconnectOptions | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDisconnectOptions | undefined"
+          }
+        ],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDisconnectOptions"
+        ],
         "slug": "disconnectthermalprinter"
       },
       {
@@ -335,6 +694,18 @@
           "NetworkPrinterConnectOptions"
         ],
         "slug": "connectnetworkprinter"
+      },
+      {
+        "name": "isNetworkConnected",
+        "signature": "() => Promise<PrinterStatusResult>",
+        "parameters": [],
+        "returns": "Promise<PrinterStatusResult>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterStatusResult"
+        ],
+        "slug": "isnetworkconnected"
       },
       {
         "name": "printNetworkText",
@@ -391,23 +762,93 @@
         "slug": "printnetworkqrcode"
       },
       {
+        "name": "printNetworkBarcode",
+        "signature": "(options: PrinterBarcodeOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterBarcodeOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterBarcodeOptions"
+        ],
+        "slug": "printnetworkbarcode"
+      },
+      {
+        "name": "sendRawNetwork",
+        "signature": "(options: PrinterRawDataOptions) => Promise<{ printed: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterRawDataOptions"
+          }
+        ],
+        "returns": "Promise<{ printed: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterRawDataOptions"
+        ],
+        "slug": "sendrawnetwork"
+      },
+      {
         "name": "kickNetworkDrawer",
-        "signature": "() => Promise<{ kicked: boolean; }>",
-        "parameters": [],
+        "signature": "(options?: PrinterDrawerOptions | undefined) => Promise<{ kicked: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDrawerOptions | undefined"
+          }
+        ],
         "returns": "Promise<{ kicked: boolean; }>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDrawerOptions"
+        ],
         "slug": "kicknetworkdrawer"
       },
       {
+        "name": "cutNetworkPaper",
+        "signature": "(options?: PrinterCutOptions | undefined) => Promise<{ cut: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterCutOptions | undefined"
+          }
+        ],
+        "returns": "Promise<{ cut: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "PrinterCutOptions"
+        ],
+        "slug": "cutnetworkpaper"
+      },
+      {
         "name": "disconnectNetworkPrinter",
-        "signature": "() => Promise<void>",
-        "parameters": [],
+        "signature": "(options?: PrinterDisconnectOptions | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "PrinterDisconnectOptions | undefined"
+          }
+        ],
         "returns": "Promise<void>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
+        "complexTypes": [
+          "PrinterDisconnectOptions"
+        ],
         "slug": "disconnectnetworkprinter"
       }
     ],
@@ -415,19 +856,57 @@
   },
   "interfaces": [
     {
-      "name": "BluetoothPrinterDevice",
-      "slug": "bluetoothprinterdevice",
+      "name": "SavedPrintersResult",
+      "slug": "savedprintersresult",
       "docs": "",
       "tags": [],
       "methods": [],
       "properties": [
         {
-          "name": "name",
+          "name": "bluetooth",
           "tags": [],
           "docs": "",
-          "complexTypes": [],
-          "type": "string"
+          "complexTypes": [
+            "SavedBluetoothPrinter"
+          ],
+          "type": "SavedBluetoothPrinter"
         },
+        {
+          "name": "usb",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SavedUsbPrinter"
+          ],
+          "type": "SavedUsbPrinter"
+        },
+        {
+          "name": "thermal",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SavedUsbPrinter"
+          ],
+          "type": "SavedUsbPrinter"
+        },
+        {
+          "name": "network",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SavedNetworkPrinter"
+          ],
+          "type": "SavedNetworkPrinter"
+        }
+      ]
+    },
+    {
+      "name": "SavedBluetoothPrinter",
+      "slug": "savedbluetoothprinter",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
         {
           "name": "address",
           "tags": [],
@@ -436,11 +915,71 @@
           "type": "string"
         },
         {
-          "name": "isPaired",
+          "name": "deviceName",
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "boolean | undefined"
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "SavedUsbPrinter",
+      "slug": "savedusbprinter",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "deviceName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "vendorId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "productId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "SavedNetworkPrinter",
+      "slug": "savednetworkprinter",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "port",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "timeout",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
         }
       ]
     },
@@ -489,6 +1028,443 @@
       ]
     },
     {
+      "name": "HtmlToImageResult",
+      "slug": "htmltoimageresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "base64",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "dataUrl",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "height",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "mimeType",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "HtmlToImageOptions",
+      "slug": "htmltoimageoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "html",
+          "tags": [],
+          "docs": "HTML string or fragment (supports CSS, tables, logos, Bangla/Arabic/Unicode fonts).",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "Output image width in pixels (default: 576; use 384 for 58mm thermal, 576 for 80mm thermal, 794 for A4).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "format",
+          "tags": [],
+          "docs": "Output image format: 'png' (default) or 'jpeg'.",
+          "complexTypes": [],
+          "type": "'png' | 'jpeg' | undefined"
+        },
+        {
+          "name": "quality",
+          "tags": [],
+          "docs": "JPEG compression quality 1-100 (default: 90).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "baseUrl",
+          "tags": [],
+          "docs": "Optional base URL for resolving relative image/CSS assets.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "delayMs",
+          "tags": [],
+          "docs": "Extra delay in milliseconds after page load before capturing (useful for web fonts/remote images, default: 150).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "HtmlToPdfResult",
+      "slug": "htmltopdfresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "base64",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "dataUrl",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "pageCount",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "mimeType",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "filePath",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "HtmlToPdfOptions",
+      "slug": "htmltopdfoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "html",
+          "tags": [],
+          "docs": "HTML string or fragment to convert into a PDF document.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "pageSize",
+          "tags": [],
+          "docs": "Page size preset (default: 'A4'). Use 'Receipt58mm' or 'Receipt80mm' for continuous receipt PDFs.",
+          "complexTypes": [
+            "HtmlPageSize"
+          ],
+          "type": "HtmlPageSize"
+        },
+        {
+          "name": "orientation",
+          "tags": [],
+          "docs": "Page orientation (default: 'portrait').",
+          "complexTypes": [
+            "HtmlPageOrientation"
+          ],
+          "type": "HtmlPageOrientation"
+        },
+        {
+          "name": "customWidthPt",
+          "tags": [],
+          "docs": "Custom page width in points (72 pt = 1 inch), used when pageSize is 'custom'.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "customHeightPt",
+          "tags": [],
+          "docs": "Custom page height in points (72 pt = 1 inch), used when pageSize is 'custom'.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "marginPt",
+          "tags": [],
+          "docs": "Page margin in points on all sides (default: 24 for standard pages, 4 for receipt presets).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "fileName",
+          "tags": [],
+          "docs": "Optional output file name (e.g., 'invoice-101.pdf'). When set or when saveToFile is true, saves PDF to app cache.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "saveToFile",
+          "tags": [],
+          "docs": "Whether to save the generated PDF to a local temporary/cache file and return filePath (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "baseUrl",
+          "tags": [],
+          "docs": "Optional base URL for resolving relative assets.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "delayMs",
+          "tags": [],
+          "docs": "Extra delay in milliseconds after page load before rendering PDF (default: 150).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "HtmlNativePrintOptions",
+      "slug": "htmlnativeprintoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "html",
+          "tags": [],
+          "docs": "HTML string or fragment to print via the OS native print dialog (Android Print Framework / iOS AirPrint).\nWorks with Wi-Fi office printers (HP, Canon, Epson, Brother), Mopria, AirPrint, and Save as PDF.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "jobName",
+          "tags": [],
+          "docs": "Print job name shown in the OS print dialog (default: 'ZPrinter Document').",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "pageSize",
+          "tags": [],
+          "docs": "Suggested paper size (default: 'A4').",
+          "complexTypes": [],
+          "type": "'A4' | 'A5' | 'Letter' | undefined"
+        },
+        {
+          "name": "orientation",
+          "tags": [],
+          "docs": "Suggested orientation (default: 'portrait').",
+          "complexTypes": [
+            "HtmlPageOrientation"
+          ],
+          "type": "HtmlPageOrientation"
+        },
+        {
+          "name": "baseUrl",
+          "tags": [],
+          "docs": "Optional base URL for resolving relative assets.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "HtmlThermalPrintOptions",
+      "slug": "htmlthermalprintoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "html",
+          "tags": [],
+          "docs": "HTML string or fragment (supports full CSS, tables, logos, and Bangla/Arabic/Unicode text).",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "printerType",
+          "tags": [],
+          "docs": "Target thermal printer transport.",
+          "complexTypes": [
+            "PrinterType"
+          ],
+          "type": "PrinterType"
+        },
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "Print width in pixels (default: 384 for 58mm printers; use 576 for 80mm printers).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "align",
+          "tags": [],
+          "docs": "Alignment on the thermal roll (default: 'center').",
+          "complexTypes": [],
+          "type": "'left' | 'center' | 'right' | undefined"
+        },
+        {
+          "name": "threshold",
+          "tags": [],
+          "docs": "Grayscale threshold 0-255 (default: 128).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "mode",
+          "tags": [],
+          "docs": "'raster' (GS v 0, default) or 'bitImage' (ESC * 33 for very old ESC/POS printers).",
+          "complexTypes": [],
+          "type": "'raster' | 'bitImage' | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "Blank lines to feed after printing (default: 2).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "cut",
+          "tags": [],
+          "docs": "Automatically cut paper after printing (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "partialCut",
+          "tags": [],
+          "docs": "Use partial cut when cut is true (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "kickDrawer",
+          "tags": [],
+          "docs": "Automatically kick cash drawer after printing (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "drawerPin",
+          "tags": [],
+          "docs": "Cash drawer pin when kickDrawer is true: 0 (Pin 2, default) or 1 (Pin 5).",
+          "complexTypes": [],
+          "type": "0 | 1 | undefined"
+        },
+        {
+          "name": "baseUrl",
+          "tags": [],
+          "docs": "Optional base URL for resolving relative assets.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "delayMs",
+          "tags": [],
+          "docs": "Extra delay in milliseconds after HTML load before capturing (default: 150).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "BluetoothPrinterDevice",
+      "slug": "bluetoothprinterdevice",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "name",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "isPaired",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "rssi",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterStatusResult",
+      "slug": "printerstatusresult",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "connected",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "deviceName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "deviceAddress",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
       "name": "PrinterTextOptions",
       "slug": "printertextoptions",
       "docs": "",
@@ -524,11 +1500,39 @@
           "type": "boolean | undefined"
         },
         {
+          "name": "isUnderline",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
           "name": "feedLines",
           "tags": [],
           "docs": "",
           "complexTypes": [],
           "type": "number | undefined"
+        },
+        {
+          "name": "encoding",
+          "tags": [],
+          "docs": "Character encoding for legacy/international ESC/POS printers (default: 'UTF-8').\nExamples: 'CP437', 'CP850', 'CP858', 'ISO-8859-1', 'GBK', 'UTF-8'.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "codePage",
+          "tags": [],
+          "docs": "Optional ESC/POS hardware character code table (ESC t n), e.g. 0 (PC437), 2 (PC850), 16 (WPC1252).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "reset",
+          "tags": [],
+          "docs": "Send ESC @ reset command before printing (default: true).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
         }
       ]
     },
@@ -549,7 +1553,7 @@
         {
           "name": "width",
           "tags": [],
-          "docs": "",
+          "docs": "Target width in pixels (e.g., 384 for 58mm printers, 576 for 80mm printers).\nIf only width is provided, height scales proportionally.",
           "complexTypes": [],
           "type": "number | undefined"
         },
@@ -566,6 +1570,27 @@
           "docs": "",
           "complexTypes": [],
           "type": "'left' | 'center' | 'right' | undefined"
+        },
+        {
+          "name": "threshold",
+          "tags": [],
+          "docs": "Grayscale threshold between 0 and 255 (default: 128).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "mode",
+          "tags": [],
+          "docs": "'raster' uses GS v 0 (default, fastest on modern printers).\n'bitImage' uses ESC * 33 (compatibility mode for very old ESC/POS printers).",
+          "complexTypes": [],
+          "type": "'raster' | 'bitImage' | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "Blank lines to feed after printing the image (default: 1).",
+          "complexTypes": [],
+          "type": "number | undefined"
         }
       ]
     },
@@ -596,6 +1621,179 @@
           "docs": "",
           "complexTypes": [],
           "type": "'left' | 'center' | 'right' | undefined"
+        },
+        {
+          "name": "errorCorrection",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'L' | 'M' | 'Q' | 'H' | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterBarcodeOptions",
+      "slug": "printerbarcodeoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "data",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "BarcodeType"
+          ],
+          "type": "BarcodeType"
+        },
+        {
+          "name": "height",
+          "tags": [],
+          "docs": "Barcode height in dots (1-255, default: 80).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "Barcode module width (2-6, default: 2).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "align",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "'left' | 'center' | 'right' | undefined"
+        },
+        {
+          "name": "hriPosition",
+          "tags": [],
+          "docs": "Human-readable text placement (default: 'below').",
+          "complexTypes": [],
+          "type": "'none' | 'above' | 'below' | 'both' | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterRawDataOptions",
+      "slug": "printerrawdataoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "base64",
+          "tags": [],
+          "docs": "Base64-encoded raw command bytes (ESC/POS, TSPL, ZPL, CPCL, Star, etc.).",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "bytes",
+          "tags": [],
+          "docs": "Array of unsigned byte values (0-255).",
+          "complexTypes": [],
+          "type": "number[] | undefined"
+        },
+        {
+          "name": "text",
+          "tags": [],
+          "docs": "Plain command text encoded as UTF-8 (useful for TSPL/ZPL/CPCL label printers).",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterDrawerOptions",
+      "slug": "printerdraweroptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "pin",
+          "tags": [],
+          "docs": "Cash drawer connector pin: 0 (Pin 2, default) or 1 (Pin 5).",
+          "complexTypes": [],
+          "type": "0 | 1 | undefined"
+        },
+        {
+          "name": "onTime",
+          "tags": [],
+          "docs": "Pulse ON duration (0-255, default: 25).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "offTime",
+          "tags": [],
+          "docs": "Pulse OFF duration (0-255, default: 250).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterCutOptions",
+      "slug": "printercutoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "partial",
+          "tags": [],
+          "docs": "Perform a partial cut instead of a full cut (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "feedLines",
+          "tags": [],
+          "docs": "Feed lines before cutting so the last line of text is not clipped (default: 3).",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PrinterDisconnectOptions",
+      "slug": "printerdisconnectoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "forget",
+          "tags": [],
+          "docs": "If true, also clears the saved printer so it will not auto-reconnect on future prints (default: false).",
+          "complexTypes": [],
+          "type": "boolean | undefined"
         }
       ]
     },
@@ -700,11 +1898,127 @@
           "docs": "",
           "complexTypes": [],
           "type": "number | undefined"
+        },
+        {
+          "name": "timeout",
+          "tags": [],
+          "docs": "Connection timeout in milliseconds (default: 5000).",
+          "complexTypes": [],
+          "type": "number | undefined"
         }
       ]
     }
   ],
   "enums": [],
-  "typeAliases": [],
+  "typeAliases": [
+    {
+      "name": "PrinterType",
+      "slug": "printertype",
+      "docs": "",
+      "types": [
+        {
+          "text": "'bluetooth'",
+          "complexTypes": []
+        },
+        {
+          "text": "'usb'",
+          "complexTypes": []
+        },
+        {
+          "text": "'thermal'",
+          "complexTypes": []
+        },
+        {
+          "text": "'network'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "HtmlPageSize",
+      "slug": "htmlpagesize",
+      "docs": "",
+      "types": [
+        {
+          "text": "'A4'",
+          "complexTypes": []
+        },
+        {
+          "text": "'A5'",
+          "complexTypes": []
+        },
+        {
+          "text": "'Letter'",
+          "complexTypes": []
+        },
+        {
+          "text": "'Receipt58mm'",
+          "complexTypes": []
+        },
+        {
+          "text": "'Receipt80mm'",
+          "complexTypes": []
+        },
+        {
+          "text": "'custom'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "HtmlPageOrientation",
+      "slug": "htmlpageorientation",
+      "docs": "",
+      "types": [
+        {
+          "text": "'portrait'",
+          "complexTypes": []
+        },
+        {
+          "text": "'landscape'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "BarcodeType",
+      "slug": "barcodetype",
+      "docs": "",
+      "types": [
+        {
+          "text": "'CODE128'",
+          "complexTypes": []
+        },
+        {
+          "text": "'CODE39'",
+          "complexTypes": []
+        },
+        {
+          "text": "'EAN13'",
+          "complexTypes": []
+        },
+        {
+          "text": "'EAN8'",
+          "complexTypes": []
+        },
+        {
+          "text": "'UPCA'",
+          "complexTypes": []
+        },
+        {
+          "text": "'UPCE'",
+          "complexTypes": []
+        },
+        {
+          "text": "'ITF'",
+          "complexTypes": []
+        },
+        {
+          "text": "'CODABAR'",
+          "complexTypes": []
+        }
+      ]
+    }
+  ],
   "pluginConfigs": []
 }
